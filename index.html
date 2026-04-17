@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kevin Bui · Data Science & ML Portfolio</title>
+  <meta name="description" content="Kevin Bui — University of Washington CS Data Science student. Data Science & ML Intern at NextGen Federal Systems. Projects in LLMs, RAG, geospatial pipelines, and analytics." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">KB<span class="dot">.</span></a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Hello, I'm</p>
+      <h1 class="hero-name">Kevin Bui</h1>
+      <h2 class="hero-title">
+        <span class="typed-text" id="typed"></span><span class="cursor">|</span>
+      </h2>
+      <p class="hero-sub">
+        Computer Science &amp; Data Science student at the University of Washington.
+        Currently building LLM tooling, geospatial data pipelines, and RAG systems at
+        NextGen Federal Systems.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ── About ──────────────────────────────────────────────────────────── -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-photo">
+          <img src="assets/photo.jpg" alt="Kevin Bui in Leavenworth, WA" />
+        </div>
+        <div class="about-text">
+          <p class="about-lead">
+            I'm a Computer Science student specializing in Data Science at the University of Washington,
+            passionate about turning messy, real-world data into production-ready systems that
+            augment how humans and machines make decisions.
+          </p>
+          <p>
+            Currently a Data Science &amp; Machine Learning Intern at
+            <strong>NextGen Federal Systems</strong>, where I build Model Context Protocol (MCP)
+            services that ground LLMs with structured satellite, weather, and geospatial data — and
+            design secure RAG architectures for confidential document analysis.
+          </p>
+          <p>
+            At UW, I also serve as a Research Assistant managing a 500+ participant subject pool,
+            where I extract and clean data with Python for multiple professors each quarter.
+          </p>
+          <ul class="about-facts">
+            <li><span class="fact-icon">🎓</span> <strong>Education:</strong> B.S. Computer Science, Data Science @ University of Washington · 2023–2026</li>
+            <li><span class="fact-icon">🏆</span> <strong>Prior:</strong> A.A. Direct Transfer · South Puget Sound CC · GPA 3.95/4.0</li>
+            <li><span class="fact-icon">📍</span> <strong>Location:</strong> Seattle, WA</li>
+            <li><span class="fact-icon">💼</span> <strong>Open to:</strong> Summer 2026 Internships &amp; New-Grad Roles</li>
+            <li><span class="fact-icon">📧</span> <strong>Email:</strong> <a href="mailto:kevinabuicollege@gmail.com">kevinabuicollege@gmail.com</a></li>
+          </ul>
+          <div class="about-links">
+            <a href="https://github.com/kevinabui" class="social-link" title="GitHub" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub
+            </a>
+            <a href="https://linkedin.com/" class="social-link" title="LinkedIn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.35-1.85 3.58 0 4.24 2.36 4.24 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              LinkedIn
+            </a>
+            <a href="assets/resume.pdf" class="social-link" title="Resume" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+              Resume
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Experience ─────────────────────────────────────────────────────── -->
+  <section id="experience" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Experience</h2>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <div>
+                <h3 class="timeline-role">Data Science &amp; Machine Learning Intern</h3>
+                <p class="timeline-company">NextGen Federal Systems · Morgantown, WV</p>
+              </div>
+              <span class="timeline-date">July 2025 — Present</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>Designed and deployed <strong>3+ Model Context Protocol (MCP) services</strong> to augment LLM workflows with structured satellite, weather, and geospatial data — improving model grounding and reducing hallucinations through deterministic tool-based retrieval.</li>
+              <li>Built a production-ready <strong>NOAA GOES satellite data pipeline</strong> integrating 10+ configurable API parameters for dynamic feature selection and standardized JSON outputs for downstream ML analysis.</li>
+              <li>Engineered a geospatial data ingestion pipeline processing <strong>1M+ USGS GNIS and NGA GNS records</strong> into SQLite, replacing probabilistic API lookups with authoritative dataset-driven entity resolution.</li>
+              <li>Developed and evaluated a secure <strong>Retrieval-Augmented Generation (RAG)</strong> architecture for 50MB+ confidential documents, implementing TOC-based semantic chunking and embedding-driven retrieval.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag tag-python">Python</span>
+              <span class="tag">LLMs</span>
+              <span class="tag">MCP</span>
+              <span class="tag">RAG</span>
+              <span class="tag">SQLite</span>
+              <span class="tag">Geospatial</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="timeline-head">
+              <div>
+                <h3 class="timeline-role">Research Assistant — Subject Pool Coordinator</h3>
+                <p class="timeline-company">University of Washington · Seattle, WA</p>
+              </div>
+              <span class="timeline-date">Sept 2025 — Present</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>Managed and optimized a subject pool database with <strong>500+ participants</strong>, ensuring 99% data accuracy.</li>
+              <li>Extracted, cleaned, and analyzed data quarterly for multiple professors using Python, reducing data processing time by <strong>20%</strong>.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag tag-python">Python</span>
+              <span class="tag">Pandas</span>
+              <span class="tag">Data Cleaning</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Projects ───────────────────────────────────────────────────────── -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="ml">Machine Learning</button>
+        <button class="filter-btn" data-filter="de">Data Engineering</button>
+        <button class="filter-btn" data-filter="da">Data Analytics</button>
+        <button class="filter-btn" data-filter="ds">Data Science</button>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+
+        <!-- ─── MCP SERVICES ─────────────────────────────────────────────── -->
+        <article class="project-card" data-category="ml">
+          <div class="card-header card-ml">
+            <span class="card-badge">Machine Learning · LLMs</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">MCP Services for LLM Workflows</h3>
+            <p class="card-desc">
+              Designed and deployed 3+ Model Context Protocol services to augment LLM workflows with
+              structured satellite, weather, and geospatial data. Deterministic tool-based retrieval
+              improves model grounding and reduces hallucinations on specialized queries.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">🛰️ 3+ production MCP services deployed</span>
+              <span class="highlight">📉 Measurable reduction in LLM hallucinations</span>
+              <span class="highlight">🏢 Built at NextGen Federal Systems</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-python">Python</span>
+            <span class="tag">MCP</span>
+            <span class="tag">LLMs</span>
+            <span class="tag">APIs</span>
+          </div>
+        </article>
+
+        <!-- ─── RAG ARCHITECTURE ─────────────────────────────────────────── -->
+        <article class="project-card" data-category="ml">
+          <div class="card-header card-ml">
+            <span class="card-badge">Machine Learning · RAG</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Secure RAG Architecture for Confidential Docs</h3>
+            <p class="card-desc">
+              Developed and evaluated a secure Retrieval-Augmented Generation system for 50MB+
+              confidential documents. Implemented TOC-based semantic chunking and embedding-driven
+              retrieval to increase contextual precision in LLM-based analysis tasks.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">📄 50MB+ confidential documents indexed</span>
+              <span class="highlight">🧩 TOC-based semantic chunking</span>
+              <span class="highlight">🔒 Security-first design</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-python">Python</span>
+            <span class="tag">RAG</span>
+            <span class="tag">Embeddings</span>
+            <span class="tag">LLMs</span>
+          </div>
+        </article>
+
+        <!-- ─── NOAA GOES PIPELINE ───────────────────────────────────────── -->
+        <article class="project-card" data-category="de">
+          <div class="card-header card-de">
+            <span class="card-badge">Data Engineering</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">NOAA GOES Satellite Data Pipeline</h3>
+            <p class="card-desc">
+              Built a production-ready pipeline integrating 10+ configurable API parameters for the
+              NOAA GOES satellite feed. Enabled dynamic feature selection and standardized JSON outputs
+              consumed directly by downstream ML analysis.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">🛰️ 10+ configurable API parameters</span>
+              <span class="highlight">📡 NOAA GOES satellite integration</span>
+              <span class="highlight">🔄 Standardized JSON outputs for ML</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-python">Python</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">JSON</span>
+            <span class="tag">Geospatial</span>
+          </div>
+        </article>
+
+        <!-- ─── GEOSPATIAL INGESTION ─────────────────────────────────────── -->
+        <article class="project-card" data-category="de">
+          <div class="card-header card-de">
+            <span class="card-badge">Data Engineering</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Geospatial Entity Resolution Pipeline</h3>
+            <p class="card-desc">
+              Engineered an ingestion pipeline processing <strong>1M+ USGS GNIS and NGA GNS records</strong>
+              into SQLite, replacing probabilistic API-based lookups with authoritative dataset-driven
+              entity resolution for ambiguous geographic queries.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">📍 1M+ records processed</span>
+              <span class="highlight">🗄️ USGS GNIS + NGA GNS → SQLite</span>
+              <span class="highlight">🎯 Deterministic entity resolution</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-python">Python</span>
+            <span class="tag tag-sql">SQLite</span>
+            <span class="tag">ETL</span>
+            <span class="tag">Geospatial</span>
+          </div>
+        </article>
+
+        <!-- ─── SUPERMARKET SALES ────────────────────────────────────────── -->
+        <article class="project-card" data-category="da">
+          <div class="card-header card-da">
+            <span class="card-badge">Data Analytics</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="#" class="card-icon-link" title="Dashboard" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Supermarket Sales Analysis</h3>
+            <p class="card-desc">
+              Analyzed 10K+ transactional records using SQL and Python to identify revenue drivers,
+              customer purchasing patterns, and inventory turnover trends. Designed interactive
+              Tableau dashboards for sales growth, customer retention, and product profitability.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">📊 10K+ transactional records</span>
+              <span class="highlight">📈 Interactive Tableau dashboards</span>
+              <span class="highlight">💡 Revenue, retention &amp; turnover insights</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-sql">SQL</span>
+            <span class="tag tag-python">Python</span>
+            <span class="tag">Tableau</span>
+            <span class="tag">Pandas</span>
+          </div>
+        </article>
+
+        <!-- ─── POKEMON SCRAPER ──────────────────────────────────────────── -->
+        <article class="project-card" data-category="ds">
+          <div class="card-header card-ds">
+            <span class="card-badge">Data Science · Scraping</span>
+            <div class="card-icons">
+              <a href="#" class="card-icon-link" title="GitHub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Pokémon Data Scraper</h3>
+            <p class="card-desc">
+              Developed a Python-based data pipeline to scrape, clean, and structure 1,000+ Pokémon
+              records, transforming unstructured HTML into analysis-ready datasets. Performed data
+              cleaning, normalization, and feature extraction with Pandas; results stored in MongoDB.
+            </p>
+            <div class="card-highlights">
+              <span class="highlight">🕷️ 1,000+ Pokémon records scraped</span>
+              <span class="highlight">🧹 Cleaning, normalization, feature extraction</span>
+              <span class="highlight">🍃 Stored in MongoDB</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="tag tag-python">Python</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Web Scraping</span>
+          </div>
+        </article>
+
+      </div><!-- /projects-grid -->
+    </div>
+  </section>
+
+  <!-- ── Skills ─────────────────────────────────────────────────────────── -->
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Skills &amp; Tools</h2>
+      <div class="skills-grid">
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">💻</span> Programming Languages
+          </h3>
+          <div class="tags">
+            <span class="tag tag-python">Python</span>
+            <span class="tag tag-java">Java</span>
+            <span class="tag tag-js">JavaScript</span>
+            <span class="tag tag-sql">MySQL</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">🤖</span> Machine Learning
+          </h3>
+          <div class="tags">
+            <span class="tag">NumPy</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">LLMs</span>
+            <span class="tag">RAG</span>
+            <span class="tag">MCP</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">📊</span> Data Visualization
+          </h3>
+          <div class="tags">
+            <span class="tag">Tableau</span>
+            <span class="tag">PowerBI</span>
+            <span class="tag">Vega-lite</span>
+            <span class="tag">D3.js</span>
+            <span class="tag">Observable</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">⚙️</span> Data Engineering
+          </h3>
+          <div class="tags">
+            <span class="tag tag-sql">MySQL</span>
+            <span class="tag tag-sql">SQLite</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">ETL Pipelines</span>
+            <span class="tag">REST APIs</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">🛠️</span> Tools &amp; Platforms
+          </h3>
+          <div class="tags">
+            <span class="tag">VSCode</span>
+            <span class="tag">PyCharm</span>
+            <span class="tag">Eclipse</span>
+            <span class="tag">Atom</span>
+            <span class="tag">Overleaf</span>
+            <span class="tag">Git</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-cat-title">
+            <span class="skill-icon">📚</span> Relevant Coursework
+          </h3>
+          <div class="tags">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Data Management</span>
+            <span class="tag">Data Visualization</span>
+            <span class="tag">Data Structures &amp; Algorithms</span>
+            <span class="tag">Statistics</span>
+            <span class="tag">Artificial Intelligence</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ─────────────────────────────────────────────────────────── -->
+  <section id="contact" class="section">
+    <div class="container contact-container">
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="contact-sub">
+        I'm actively looking for Summer 2026 internships and new-grad opportunities.
+        Always happy to chat about data, ML, or interesting problems.
+      </p>
+      <a href="mailto:kevinabuicollege@gmail.com" class="btn btn-primary btn-large">
+        Say Hello ✉️
+      </a>
+      <div class="contact-links">
+        <a href="https://github.com/kevinabui" class="social-link" target="_blank" rel="noopener">GitHub</a>
+        <span class="divider">·</span>
+        <a href="https://linkedin.com/" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="divider">·</span>
+        <a href="assets/resume.pdf" class="social-link" download>Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer>
+    <p>Designed &amp; built by <strong>Kevin Bui</strong> · University of Washington · 2025</p>
+    <p class="footer-stack">Python · Java · JavaScript · MySQL</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
