@@ -2,36 +2,6 @@
    Kevin Bui · Portfolio — main.js
    ───────────────────────────────────────────────────────────────────────── */
 
-// ── Typed headline ───────────────────────────────────────────────────────────
-(function initTyped() {
-  const el     = document.getElementById('typed');
-  const phrases = [
-    'Data Science Intern @ NextGen Federal Systems',
-    'CS Student @ University of Washington',
-    'Machine Learning Engineer',
-    'Data Engineer',
-    'Data Analyst',
-  ];
-  let phraseIdx = 0, charIdx = 0, deleting = false;
-
-  function tick() {
-    const phrase  = phrases[phraseIdx];
-    el.textContent = deleting ? phrase.slice(0, charIdx--) : phrase.slice(0, charIdx++);
-
-    let delay = deleting ? 45 : 80;
-    if (!deleting && charIdx > phrase.length) {
-      deleting = true;
-      delay    = 1800;
-    } else if (deleting && charIdx < 0) {
-      deleting  = false;
-      phraseIdx = (phraseIdx + 1) % phrases.length;
-      delay     = 400;
-    }
-    setTimeout(tick, delay);
-  }
-  tick();
-})();
-
 
 // ── Navbar scroll effect ─────────────────────────────────────────────────────
 (function initNavbar() {

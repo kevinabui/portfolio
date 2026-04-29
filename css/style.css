@@ -11,9 +11,9 @@
   --bg-card:     #ffffff;
   --border:      #e2e8f0;
   --border-soft: #edf1f7;
-  --accent:      #4f46e5;
-  --accent-hover:#6366f1;
-  --accent-soft: #eef2ff;
+  --accent:      #0369a1;
+  --accent-hover:#0284c7;
+  --accent-soft: #f0f9ff;
   --text:        #1e293b;
   --text-muted:  #475569;
   --text-sub:    #94a3b8;
@@ -166,20 +166,10 @@ button { cursor: pointer; font-family: inherit; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 20% 20%, rgba(139,92,246,.18) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 50% at 85% 30%, rgba(59,130,246,.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 95%, rgba(16,185,129,.12) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(3,105,161,.10) 0%, transparent 70%),
+    linear-gradient(rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px;
   z-index: 0;
-}
-.hero-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(1.2px 1.2px at 25% 25%, rgba(79,70,229,.35), transparent),
-    radial-gradient(1.2px 1.2px at 75% 75%, rgba(139,92,246,.30), transparent);
-  background-size: 60px 60px;
-  opacity: .4;
 }
 
 .hero-content {
@@ -204,7 +194,7 @@ button { cursor: pointer; font-family: inherit; }
   font-weight: 800;
   letter-spacing: -.03em;
   line-height: 1.05;
-  background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #0369a1 65%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -213,21 +203,15 @@ button { cursor: pointer; font-family: inherit; }
   animation: fadeUp .6s .25s forwards;
 }
 
-.hero-title {
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+.hero-role {
+  font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 500;
-  color: var(--text-muted);
+  color: var(--accent);
   font-family: 'Fira Code', monospace;
+  letter-spacing: .02em;
   margin-bottom: 1.5rem;
-  min-height: 2em;
   opacity: 0;
   animation: fadeUp .6s .4s forwards;
-}
-.cursor {
-  display: inline-block;
-  animation: blink 1s step-end infinite;
-  color: var(--accent);
-  font-weight: 300;
 }
 
 .hero-sub {
@@ -285,14 +269,15 @@ button { cursor: pointer; font-family: inherit; }
   white-space: nowrap;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--ml-color) 100%);
+  background: var(--accent);
   color: #ffffff;
   border: 1px solid transparent;
-  box-shadow: 0 4px 14px rgba(79,70,229,.30);
+  box-shadow: 0 4px 14px rgba(3,105,161,.25);
 }
 .btn-primary:hover {
+  background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(79,70,229,.40);
+  box-shadow: 0 6px 20px rgba(3,105,161,.35);
 }
 .btn-outline {
   background: #ffffff;
@@ -387,8 +372,17 @@ button { cursor: pointer; font-family: inherit; }
 }
 .about-facts li { font-size: .92rem; color: var(--text-muted); }
 .about-facts a { color: var(--accent); transition: color var(--transition); }
-.about-facts a:hover { color: #79bbff; text-decoration: underline; }
-.fact-icon { margin-right: .4rem; }
+.about-facts a:hover { color: var(--accent-hover); text-decoration: underline; }
+.fact-label {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--accent);
+  min-width: 82px;
+  margin-right: .4rem;
+}
 
 .about-links {
   display: flex;
@@ -569,10 +563,10 @@ button { cursor: pointer; font-family: inherit; }
 }
 .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
 .filter-btn.active {
-  background: linear-gradient(135deg, var(--accent), var(--ml-color));
+  background: var(--accent);
   border-color: transparent;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(79,70,229,.30);
+  box-shadow: 0 4px 14px rgba(3,105,161,.25);
 }
 
 .projects-grid {
@@ -650,16 +644,6 @@ button { cursor: pointer; font-family: inherit; }
   line-height: 1.65;
   margin-bottom: 1rem;
 }
-.card-highlights {
-  display: flex;
-  flex-direction: column;
-  gap: .35rem;
-}
-.highlight {
-  font-size: .8rem;
-  color: var(--text-muted);
-  font-family: 'Fira Code', monospace;
-}
 
 .card-footer {
   display: flex;
@@ -707,10 +691,6 @@ footer strong { color: var(--text); }
 }
 @keyframes fadeIn {
   to { opacity: 1; }
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
 }
 @keyframes scrollPulse {
   0%, 100% { transform: scaleY(1); opacity: .6; }
