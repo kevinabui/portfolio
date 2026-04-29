@@ -111,7 +111,20 @@
       <h2 class="section-title">Log a Session</h2>
       <p class="section-sub">Enter your stats from the alley's scoring system after each game.</p>
 
-      <form id="log-form" class="log-form" autocomplete="off">
+      <datalist id="lane-suggestions">
+        <option value="Husky Union Building" />
+        <option value="West Side Lanes Olympia" />
+        <option value="Kenmore Lanes" />
+        <option value="Evergreen Lanes" />
+        <option value="Imperial Lanes Seattle" />
+        <option value="Narrows Plaza Bowl Tacoma" />
+        <option value="Sunset Bowl Everett" />
+        <option value="Tower Lanes Tukwila" />
+        <option value="Auburn Bowl" />
+        <option value="Totem Bowl Mountlake Terrace" />
+      </datalist>
+
+      <form id="log-form" class="log-form">
         <div class="form-top">
           <div class="form-group">
             <label for="log-date">Date</label>
@@ -119,7 +132,7 @@
           </div>
           <div class="form-group">
             <label for="log-location">Location</label>
-            <input type="text" id="log-location" placeholder="e.g. Kenmore Lanes" required />
+            <input type="text" id="log-location" list="lane-suggestions" placeholder="e.g. Husky Union Building" required />
           </div>
         </div>
 

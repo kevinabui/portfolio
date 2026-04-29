@@ -225,6 +225,12 @@
   flex-direction: column;
   gap: .4rem;
 }
+.label-hint {
+  font-weight: 400;
+  font-size: .72rem;
+  color: var(--accent);
+  opacity: .75;
+}
 .form-group label {
   font-size: .78rem;
   font-weight: 600;
@@ -246,6 +252,12 @@
 }
 .form-group input:focus,
 .form-group select:focus { border-color: var(--accent); }
+.form-group input.input-auto {
+  background: var(--bg);
+  color: var(--accent);
+  cursor: default;
+  border-color: transparent;
+}
 
 .game-entry {
   border: 1px solid var(--border);

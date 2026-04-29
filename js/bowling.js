@@ -303,7 +303,7 @@ function initLogForm(data) {
           <input type="number" name="scratch" min="0" max="300" placeholder="0 – 300" />
         </div>
         <div class="form-group">
-          <label>Open Frames</label>
+          <label>Open Frames <span class="label-hint">(auto from strikes/spares)</span></label>
           <input type="number" name="openFrames" min="0" max="10" placeholder="0 – 10" />
         </div>
         <div class="form-group">
@@ -320,15 +320,34 @@ function initLogForm(data) {
         </div>
         <div class="form-group">
           <label>1st Ball Speed (mph)</label>
-          <input type="number" name="firstBallSpeed" step="0.1" min="0" max="30" placeholder="e.g. 14.2" />
+          <input type="number" name="firstBallSpeed" step="any" min="0" max="30" placeholder="e.g. 14.2" />
         </div>
         <div class="form-group">
           <label>2nd Ball Speed (mph)</label>
-          <input type="number" name="secondBallSpeed" step="0.1" min="0" max="30" placeholder="e.g. 13.5" />
+          <input type="number" name="secondBallSpeed" step="any" min="0" max="30" placeholder="e.g. 13.5" />
         </div>
       </div>
     `;
     div.querySelector('.remove-game-btn')?.addEventListener('click', () => div.remove());
+
+    // Auto-calc open frames from strikes + spares
+    const strikesEl = div.querySelector('[name=strikes]');
+    const sparesEl  = div.querySelector('[name=spares]');
+    const opensEl   = div.querySelector('[name=openFrames]');
+    function recalcOpens() {
+      if (strikesEl.value === '' && sparesEl.value === '') {
+        opensEl.value = '';
+        opensEl.removeAttribute('readonly');
+        opensEl.classList.remove('input-auto');
+      } else {
+        opensEl.value = Math.max(0, 10 - (parseInt(strikesEl.value) || 0) - (parseInt(sparesEl.value) || 0));
+        opensEl.setAttribute('readonly', '');
+        opensEl.classList.add('input-auto');
+      }
+    }
+    strikesEl.addEventListener('input', recalcOpens);
+    sparesEl.addEventListener('input', recalcOpens);
+
     gamesList.appendChild(div);
   }
 
