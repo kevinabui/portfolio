@@ -197,6 +197,7 @@ function renderHistory(data) {
   el.innerHTML = '';
 
   const fmt = d => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const locationLabel = loc => loc.toLowerCase().includes('husky') ? `🐾 ${loc}` : loc;
 
   [...data.sessions].reverse().forEach((session, idx) => {
     const isFirst = idx === 0;
@@ -211,7 +212,7 @@ function renderHistory(data) {
       <div class="session-header session-toggle">
         <div class="session-meta">
           <span class="session-date">${fmt(session.date)}</span>
-          <span class="session-location">${session.location}</span>
+          <span class="session-location">${locationLabel(session.location)}</span>
         </div>
         <div class="session-header-right">
           ${avgScratch != null ? `<span class="session-avg">avg ${avgScratch}</span>` : ''}
