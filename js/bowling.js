@@ -158,26 +158,6 @@ function renderCharts(stats) {
     },
   });
 
-  // 1st ball average
-  destroyChart('firstBall');
-  charts['firstBall'] = new Chart(document.getElementById('firstBallChart'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: '1st Ball Avg',
-        data: games.map(g => g.firstBallAvg || null),
-        borderColor: '#8b5cf6',
-        backgroundColor: 'rgba(139,92,246,.07)',
-        borderWidth: 2,
-        pointRadius: 4,
-        pointBackgroundColor: '#8b5cf6',
-        tension: 0.3,
-        fill: true,
-      }],
-    },
-    options: chartOptions({ yMin: 0, yMax: 10, unit: ' pins' }),
-  });
 }
 
 function chartOptions({ yMin = 0, yMax, unit = '' }) {
@@ -232,10 +212,6 @@ function renderHistory(data) {
               <span class="game-stat-val highlight">${g.scratch ?? '--'}</span>
             </div>
             <div class="game-stat">
-              <span class="game-stat-label">+ HDCP</span>
-              <span class="game-stat-val">${g.hdcpScore ?? '--'}</span>
-            </div>
-            <div class="game-stat">
               <span class="game-stat-label">Strikes</span>
               <span class="game-stat-val">${g.strikes ?? '--'}</span>
             </div>
@@ -250,10 +226,6 @@ function renderHistory(data) {
             <div class="game-stat">
               <span class="game-stat-label">Gutters</span>
               <span class="game-stat-val">${g.gutters ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">1st Ball Avg</span>
-              <span class="game-stat-val">${g.firstBallAvg ?? '--'}</span>
             </div>
             <div class="game-stat">
               <span class="game-stat-label">1st Speed</span>
@@ -331,10 +303,6 @@ function initLogForm(data) {
           <input type="number" name="scratch" min="0" max="300" placeholder="0 – 300" />
         </div>
         <div class="form-group">
-          <label>Scratch + HDCP</label>
-          <input type="number" name="hdcpScore" min="0" max="400" placeholder="0 – 400" />
-        </div>
-        <div class="form-group">
           <label>Open Frames</label>
           <input type="number" name="openFrames" min="0" max="10" placeholder="0 – 10" />
         </div>
@@ -349,10 +317,6 @@ function initLogForm(data) {
         <div class="form-group">
           <label>Gutters</label>
           <input type="number" name="gutters" min="0" max="20" placeholder="0 – 20" />
-        </div>
-        <div class="form-group">
-          <label>1st Ball Avg (pins)</label>
-          <input type="number" name="firstBallAvg" step="0.1" min="0" max="10" placeholder="e.g. 7.8" />
         </div>
         <div class="form-group">
           <label>1st Ball Speed (mph)</label>
@@ -381,12 +345,10 @@ function initLogForm(data) {
 
     const games = [...gamesList.querySelectorAll('.game-entry')].map(entry => ({
       scratch:         num(entry.querySelector('[name=scratch]').value),
-      hdcpScore:       num(entry.querySelector('[name=hdcpScore]').value),
       openFrames:      num(entry.querySelector('[name=openFrames]').value),
       spares:          num(entry.querySelector('[name=spares]').value),
       strikes:         num(entry.querySelector('[name=strikes]').value),
       gutters:         num(entry.querySelector('[name=gutters]').value),
-      firstBallAvg:    num(entry.querySelector('[name=firstBallAvg]').value),
       firstBallSpeed:  num(entry.querySelector('[name=firstBallSpeed]').value),
       secondBallSpeed: num(entry.querySelector('[name=secondBallSpeed]').value),
     }));

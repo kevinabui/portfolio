@@ -100,6 +100,7 @@
   margin-bottom: 1.5rem;
 }
 .charts-grid-bottom { margin-bottom: 0; }
+.charts-grid-single { max-width: 420px; margin-inline: auto; }
 .chart-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -179,7 +180,7 @@
 }
 .game-stats-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: .5rem;
 }
 .game-stat {
@@ -392,13 +393,13 @@
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
   .stat-card:nth-child(3) { border-right: none; }
   .charts-grid { grid-template-columns: 1fr; }
-  .game-stats-grid { grid-template-columns: repeat(5, 1fr); }
+  .game-stats-grid { grid-template-columns: repeat(4, 1fr); }
   .game-fields { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .form-top { grid-template-columns: 1fr; }
-  .game-stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .game-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .game-fields { grid-template-columns: 1fr; }
   #scorecard { grid-template-columns: repeat(5, 1fr); }
 }
