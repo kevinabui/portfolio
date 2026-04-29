@@ -471,7 +471,164 @@
   font-family: 'Fira Code', monospace;
 }
 
-/* Responsive */
+/* ── Lane Wood Texture ───────────────────────────────────────────────────── */
+.bowl-section {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 49px,
+    rgba(200,175,110,.035) 49px, rgba(200,175,110,.035) 50px
+  );
+}
+.bowl-section-alt {
+  background-color: var(--bg-alt);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 49px,
+    rgba(200,175,110,.045) 49px, rgba(200,175,110,.045) 50px
+  );
+}
+
+/* ── Hero Lane Animation ─────────────────────────────────────────────────── */
+.bowl-hero { padding-bottom: 90px; }
+
+.hero-lane {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 72px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lane-ball {
+  position: absolute;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  top: 50%; margin-top: -19px;
+  background: radial-gradient(circle at 38% 32%, #475569, #0f172a);
+  box-shadow: 0 4px 14px rgba(15,23,42,.35);
+  animation: bowlRoll 5.5s 1s ease-in-out infinite;
+}
+.lane-ball::before {
+  content: '';
+  position: absolute;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.13);
+  top: 9px; left: 13px;
+  box-shadow: 8px 1px 0 rgba(255,255,255,.10), 2px 10px 0 rgba(255,255,255,.09);
+}
+
+.lane-pins {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-16px, -50%);
+  display: grid;
+  grid-template-columns: repeat(4, 12px);
+  grid-template-rows: repeat(7, 12px);
+  gap: 4px;
+}
+.lp {
+  display: block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #f8fafc;
+  border: 1.5px solid #94a3b8;
+  box-shadow: 0 1px 3px rgba(15,23,42,.18);
+}
+
+/* rotated triangle: ball comes from left, hits pin 1 (head pin) first */
+.lp1  { grid-column:1; grid-row:4; animation: pinS1  5.5s 1s ease-in infinite; }
+.lp2  { grid-column:2; grid-row:3; animation: pinS2  5.5s 1s ease-in infinite; }
+.lp3  { grid-column:2; grid-row:5; animation: pinS3  5.5s 1s ease-in infinite; }
+.lp4  { grid-column:3; grid-row:2; animation: pinS4  5.5s 1s ease-in infinite; }
+.lp5  { grid-column:3; grid-row:4; animation: pinS5  5.5s 1s ease-in infinite; }
+.lp6  { grid-column:3; grid-row:6; animation: pinS6  5.5s 1s ease-in infinite; }
+.lp7  { grid-column:4; grid-row:1; animation: pinS7  5.5s 1s ease-in infinite; }
+.lp8  { grid-column:4; grid-row:3; animation: pinS8  5.5s 1s ease-in infinite; }
+.lp9  { grid-column:4; grid-row:5; animation: pinS9  5.5s 1s ease-in infinite; }
+.lp10 { grid-column:4; grid-row:7; animation: pinS10 5.5s 1s ease-in infinite; }
+
+@keyframes bowlRoll {
+  0%   { left:-5%;  opacity:0; transform:rotate(0deg); }
+  6%   { opacity:1; }
+  52%  { left:46%;  transform:rotate(480deg); }
+  58%  { left:50%;  transform:rotate(530deg); }
+  86%  { left:104%; opacity:0; transform:rotate(720deg); }
+  99%  { left:-5%;  opacity:0; transform:rotate(0deg); }
+  100% { left:-5%;  opacity:0; transform:rotate(0deg); }
+}
+
+/* Pins hold until 52% of 5.5s ≈ 2.86s, then scatter */
+@keyframes pinS1  { 0%,52%{transform:translate(0,0);opacity:1} 80%{transform:translate(22px,4px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS2  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(-8px,-22px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS3  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(-8px,22px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS4  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,-32px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS5  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(28px,0px);opacity:0}    99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS6  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,32px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS7  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(14px,-38px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS8  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(32px,-14px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS9  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(32px,14px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS10 { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(14px,38px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+
+/* ── 10-Pin Diagram ──────────────────────────────────────────────────────── */
+.pin-diagram-wrap {
+  position: relative;
+  width: 186px;
+  height: 140px;
+  margin: 1.5rem auto .75rem;
+}
+.pd-pin {
+  position: absolute;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  transition: background .4s, box-shadow .4s;
+}
+.pd-pin:nth-child(1)  { top:0px;   left:80px;  }
+.pd-pin:nth-child(2)  { top:38px;  left:56px;  }
+.pd-pin:nth-child(3)  { top:38px;  left:104px; }
+.pd-pin:nth-child(4)  { top:76px;  left:32px;  }
+.pd-pin:nth-child(5)  { top:76px;  left:80px;  }
+.pd-pin:nth-child(6)  { top:76px;  left:128px; }
+.pd-pin:nth-child(7)  { top:114px; left:8px;   }
+.pd-pin:nth-child(8)  { top:114px; left:56px;  }
+.pd-pin:nth-child(9)  { top:114px; left:104px; }
+.pd-pin:nth-child(10) { top:114px; left:152px; }
+
+.pd-strike { background:var(--accent);      box-shadow:0 0 10px rgba(3,105,161,.45); border:2px solid transparent; }
+.pd-spare  { background:#10b981;            box-shadow:0 0 10px rgba(16,185,129,.4);  border:2px solid transparent; }
+.pd-open   { background:#e2e8f0;            border:2px solid #cbd5e1; }
+
+.pin-legend {
+  display:flex;
+  justify-content:center;
+  gap:1.25rem;
+  flex-wrap:wrap;
+  margin-bottom:.5rem;
+}
+.pd-legend-item {
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+  font-size:.75rem;
+  color:var(--text-muted);
+}
+.pd-dot {
+  width:10px; height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* ── Stat count-up flash ─────────────────────────────────────────────────── */
+@keyframes statPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.stat-value.counting { animation: statPop .35s ease-out; }
+
+/* ── Responsive */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
   .stat-card:nth-child(3) { border-right: none; }

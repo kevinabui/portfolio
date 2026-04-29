@@ -141,30 +141,36 @@ function renderCharts(stats) {
     options: chartOptions({ yMin: 0, unit: ' mph' }),
   });
 
-  // Frame breakdown donut
-  destroyChart('breakdown');
-  charts['breakdown'] = new Chart(document.getElementById('breakdownChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Strikes', 'Spares', 'Open Frames'],
-      datasets: [{
-        data: [stats.totalStrikes, stats.totalSpares, stats.totalOpens],
-        backgroundColor: ['#0369a1', '#10b981', '#e2e8f0'],
-        borderWidth: 0,
-        hoverOffset: 6,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '65%',
-      plugins: {
-        legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12 }, boxWidth: 14 } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } },
-      },
-    },
-  });
+  renderPinDiagram(stats);
+}
 
+// ── 10-Pin Diagram ────────────────────────────────────────────────────────
+function renderPinDiagram(stats) {
+  const el     = document.getElementById('pinDiagram');
+  const legend = document.getElementById('pinLegend');
+  if (!el) return;
+
+  const strikes = Math.round(parseFloat(stats.avgStrikes));
+  const spares  = Math.round(parseFloat(stats.avgSpares));
+  const opens   = Math.max(0, 10 - strikes - spares);
+
+  const colors = [];
+  let s = strikes, sp = spares;
+  for (let i = 0; i < 10; i++) {
+    if (s > 0)       { colors.push('strike'); s--; }
+    else if (sp > 0) { colors.push('spare');  sp--; }
+    else             { colors.push('open'); }
+  }
+
+  el.innerHTML = colors.map((c, i) =>
+    `<span class="pd-pin pd-${c}" title="Pin ${i + 1}"></span>`
+  ).join('');
+
+  legend.innerHTML = `
+    <span class="pd-legend-item"><span class="pd-dot pd-strike"></span> ~${strikes} strikes/game</span>
+    <span class="pd-legend-item"><span class="pd-dot pd-spare"></span> ~${spares} spares/game</span>
+    <span class="pd-legend-item"><span class="pd-dot pd-open"></span> ~${opens} opens/game</span>
+  `;
 }
 
 function chartOptions({ yMin = 0, yMax, unit = '' }) {
@@ -298,6 +304,8 @@ function renderAll(data) {
     });
     renderCharts(stats);
     renderHistory(data);
+    initReveal();
+    animateStats(stats);
   } else {
     document.getElementById('stat-avg').textContent     = '--';
     document.getElementById('stat-high').textContent    = '--';
@@ -649,9 +657,44 @@ function initGate() {
   input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
 }
 
+// ── Count-up animation ────────────────────────────────────────────────────
+function countUp(el, target, suffix = '', duration = 800) {
+  const isFloat = target % 1 !== 0;
+  const start   = performance.now();
+  el.classList.add('counting');
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = (isFloat ? (ease * target).toFixed(1) : Math.round(ease * target)) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+    else el.classList.remove('counting');
+  }
+  requestAnimationFrame(step);
+}
+
+function animateStats(stats) {
+  const avgVal = stats.avgScore !== '--' ? +stats.avgScore : null;
+  if (avgVal !== null) countUp(document.getElementById('stat-avg'), avgVal);
+  if (stats.highGame !== '--') countUp(document.getElementById('stat-high'), +stats.highGame);
+  countUp(document.getElementById('stat-strikes'), parseFloat(stats.avgStrikes), '', 900);
+  countUp(document.getElementById('stat-spares'),  parseFloat(stats.avgSpares),  '', 900);
+  if (stats.avgSpeed !== '--') countUp(document.getElementById('stat-speed'), parseFloat(stats.avgSpeed), ' mph', 900);
+  countUp(document.getElementById('stat-games'), stats.totalGames);
+}
+
+// ── Scroll reveal ─────────────────────────────────────────────────────────
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 const data = loadData();
 renderAll(data);
 initLogForm(data);
 initScorecard();
 initGate();
+initReveal();
+if (computeStats(data)) animateStats(computeStats(data));

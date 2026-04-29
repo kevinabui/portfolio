@@ -34,6 +34,15 @@
       <h1 class="bowl-title">Bowling Stats</h1>
       <p class="bowl-sub">Tracking my games over time to find patterns and measure improvement. Built with Chart.js.</p>
     </div>
+    <div class="hero-lane" aria-hidden="true">
+      <div class="lane-ball"></div>
+      <div class="lane-pins">
+        <i class="lp lp1"></i><i class="lp lp2"></i><i class="lp lp3"></i>
+        <i class="lp lp4"></i><i class="lp lp5"></i><i class="lp lp6"></i>
+        <i class="lp lp7"></i><i class="lp lp8"></i><i class="lp lp9"></i>
+        <i class="lp lp10"></i>
+      </div>
+    </div>
   </section>
 
   <!-- Stats Bar -->
@@ -75,14 +84,14 @@
   <section class="bowl-section" id="charts-section" style="display:none">
     <div class="container">
       <div class="charts-grid">
-        <div class="chart-card">
+        <div class="chart-card reveal">
           <h2 class="chart-title">Score Over Time</h2>
           <p class="chart-sub">Scratch score per game with 3-game rolling average</p>
           <div class="chart-wrap">
             <canvas id="scoreChart"></canvas>
           </div>
         </div>
-        <div class="chart-card">
+        <div class="chart-card reveal">
           <h2 class="chart-title">Ball Speed</h2>
           <p class="chart-sub">1st and 2nd ball average speed (mph)</p>
           <div class="chart-wrap">
@@ -91,12 +100,11 @@
         </div>
       </div>
       <div class="charts-grid-single">
-        <div class="chart-card">
+        <div class="chart-card reveal">
           <h2 class="chart-title">Frame Breakdown</h2>
-          <p class="chart-sub">Overall strike, spare, and open frame distribution</p>
-          <div class="chart-wrap chart-wrap-sm">
-            <canvas id="breakdownChart"></canvas>
-          </div>
+          <p class="chart-sub">Avg strikes, spares &amp; opens per game (last 15)</p>
+          <div id="pinDiagram" class="pin-diagram-wrap"></div>
+          <div id="pinLegend" class="pin-legend"></div>
         </div>
       </div>
     </div>
