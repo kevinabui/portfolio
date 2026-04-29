@@ -607,7 +607,7 @@ function initGate() {
   if (sessionStorage.getItem('bowl_unlocked') === '1') { unlock(); return; }
 
   btn.addEventListener('click', () => {
-    if (input.value === 'K20053634!') {
+    if (input.value.trim() === 'K20053634!') {
       unlock();
     } else {
       err.textContent = 'Incorrect password.';
