@@ -191,54 +191,72 @@ function renderHistory(data) {
 
   const fmt = d => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-  [...data.sessions].reverse().forEach(session => {
+  [...data.sessions].reverse().forEach((session, idx) => {
+    const isFirst = idx === 0;
+    const avgScratch = session.games.filter(g => g.scratch).length
+      ? Math.round(session.games.reduce((a, g) => a + (g.scratch || 0), 0) / session.games.filter(g => g.scratch).length)
+      : null;
+
     const card = document.createElement('div');
-    card.className = 'session-card';
+    card.className = 'session-card' + (isFirst ? ' session-open' : ' session-collapsed');
 
     card.innerHTML = `
-      <div class="session-header">
+      <div class="session-header session-toggle">
         <div class="session-meta">
           <span class="session-date">${fmt(session.date)}</span>
           <span class="session-location">${session.location}</span>
         </div>
-        <button class="delete-session-btn" data-id="${session.id}">Delete</button>
+        <div class="session-header-right">
+          ${avgScratch != null ? `<span class="session-avg">avg ${avgScratch}</span>` : ''}
+          <span class="session-chevron">${isFirst ? '▲' : '▼'}</span>
+          <button class="delete-session-btn" data-id="${session.id}">Delete</button>
+        </div>
       </div>
-      ${session.games.map((g, i) => `
-        <div class="game-row">
-          <div class="game-row-label">Game ${i + 1}</div>
-          <div class="game-stats-grid">
-            <div class="game-stat">
-              <span class="game-stat-label">Scratch</span>
-              <span class="game-stat-val highlight">${g.scratch ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">Strikes</span>
-              <span class="game-stat-val">${g.strikes ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">Spares</span>
-              <span class="game-stat-val">${g.spares ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">Opens</span>
-              <span class="game-stat-val">${g.openFrames ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">Gutters</span>
-              <span class="game-stat-val">${g.gutters ?? '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">1st Speed</span>
-              <span class="game-stat-val">${g.firstBallSpeed != null ? g.firstBallSpeed + ' mph' : '--'}</span>
-            </div>
-            <div class="game-stat">
-              <span class="game-stat-label">2nd Speed</span>
-              <span class="game-stat-val">${g.secondBallSpeed != null ? g.secondBallSpeed + ' mph' : '--'}</span>
+      <div class="session-body">
+        ${session.games.map((g, i) => `
+          <div class="game-row">
+            <div class="game-row-label">Game ${i + 1}</div>
+            <div class="game-stats-grid">
+              <div class="game-stat">
+                <span class="game-stat-label">Scratch</span>
+                <span class="game-stat-val highlight">${g.scratch ?? '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">Strikes</span>
+                <span class="game-stat-val">${g.strikes ?? '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">Spares</span>
+                <span class="game-stat-val">${g.spares ?? '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">Opens</span>
+                <span class="game-stat-val">${g.openFrames ?? '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">Gutters</span>
+                <span class="game-stat-val">${g.gutters ?? '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">1st Speed</span>
+                <span class="game-stat-val">${g.firstBallSpeed != null ? g.firstBallSpeed + ' mph' : '--'}</span>
+              </div>
+              <div class="game-stat">
+                <span class="game-stat-label">2nd Speed</span>
+                <span class="game-stat-val">${g.secondBallSpeed != null ? g.secondBallSpeed + ' mph' : '--'}</span>
+              </div>
             </div>
           </div>
-        </div>
-      `).join('')}
+        `).join('')}
+      </div>
     `;
+
+    card.querySelector('.session-toggle').addEventListener('click', e => {
+      if (e.target.closest('.delete-session-btn')) return;
+      const open = card.classList.toggle('session-open');
+      card.classList.toggle('session-collapsed', !open);
+      card.querySelector('.session-chevron').textContent = open ? '▲' : '▼';
+    });
 
     card.querySelector('.delete-session-btn').addEventListener('click', () => {
       if (!confirm('Delete this session?')) return;

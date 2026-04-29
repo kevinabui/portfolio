@@ -131,6 +131,11 @@
   margin-bottom: 1.25rem;
   box-shadow: var(--shadow-sm);
 }
+.session-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+.session-toggle:hover { background: var(--bg-card); }
 .session-header {
   display: flex;
   align-items: center;
@@ -138,6 +143,25 @@
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--bg-alt);
+  transition: background var(--transition);
+}
+.session-collapsed .session-header { border-bottom: none; }
+.session-body { overflow: hidden; }
+.session-collapsed .session-body { display: none; }
+.session-header-right {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.session-avg {
+  font-size: .78rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--accent);
+  font-weight: 500;
+}
+.session-chevron {
+  font-size: .65rem;
+  color: var(--text-muted);
 }
 .session-meta { display: flex; flex-direction: column; gap: .15rem; }
 .session-date {
