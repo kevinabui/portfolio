@@ -80,6 +80,12 @@
   letter-spacing: .07em;
   color: var(--text-sub);
 }
+.stat-window {
+  font-size: .62rem;
+  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
+  opacity: .7;
+}
 
 /* Sections */
 .bowl-section { padding: 72px 0; }

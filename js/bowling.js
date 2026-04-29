@@ -29,20 +29,27 @@ function computeStats(data) {
   const games = allGames(data);
   if (!games.length) return null;
 
-  const scratches    = games.map(g => g.scratch).filter(Boolean);
-  const totalStrikes = games.reduce((a, g) => a + (g.strikes || 0), 0);
-  const totalSpares  = games.reduce((a, g) => a + (g.spares || 0), 0);
-  const totalOpens   = games.reduce((a, g) => a + (g.openFrames || 0), 0);
-  const speeds       = games.map(g => g.firstBallSpeed).filter(Boolean);
+  const recent = games.slice(-15);
+
+  const allScratches    = games.map(g => g.scratch).filter(Boolean);
+  const totalStrikes    = games.reduce((a, g) => a + (g.strikes || 0), 0);
+  const totalSpares     = games.reduce((a, g) => a + (g.spares || 0), 0);
+  const totalOpens      = games.reduce((a, g) => a + (g.openFrames || 0), 0);
+
+  const recentScratches = recent.map(g => g.scratch).filter(Boolean);
+  const recentStrikes   = recent.reduce((a, g) => a + (g.strikes || 0), 0);
+  const recentSpares    = recent.reduce((a, g) => a + (g.spares || 0), 0);
+  const recentSpeeds    = recent.map(g => g.firstBallSpeed).filter(Boolean);
 
   return {
     games,
-    avgScore:    scratches.length ? Math.round(scratches.reduce((a, b) => a + b, 0) / scratches.length) : '--',
-    highGame:    scratches.length ? Math.max(...scratches) : '--',
-    avgStrikes:  (totalStrikes / games.length).toFixed(1),
-    avgSpares:   (totalSpares  / games.length).toFixed(1),
-    avgSpeed:    speeds.length ? (speeds.reduce((a, b) => a + b, 0) / speeds.length).toFixed(1) : '--',
+    avgScore:    recentScratches.length ? Math.round(recentScratches.reduce((a, b) => a + b, 0) / recentScratches.length) : '--',
+    highGame:    allScratches.length ? Math.max(...allScratches) : '--',
+    avgStrikes:  (recentStrikes / recent.length).toFixed(1),
+    avgSpares:   (recentSpares  / recent.length).toFixed(1),
+    avgSpeed:    recentSpeeds.length ? (recentSpeeds.reduce((a, b) => a + b, 0) / recentSpeeds.length).toFixed(1) : '--',
     totalGames:  games.length,
+    recentCount: recent.length,
     totalStrikes, totalSpares, totalOpens,
   };
 }
@@ -278,12 +285,16 @@ function renderAll(data) {
   document.getElementById('history-section').style.display = hasData ? '' : 'none';
 
   if (hasData) {
+    const windowLabel = `last ${stats.recentCount} game${stats.recentCount !== 1 ? 's' : ''}`;
     document.getElementById('stat-avg').textContent    = stats.avgScore;
     document.getElementById('stat-high').textContent   = stats.highGame;
     document.getElementById('stat-strikes').textContent = stats.avgStrikes;
     document.getElementById('stat-spares').textContent  = stats.avgSpares;
     document.getElementById('stat-speed').textContent   = stats.avgSpeed !== '--' ? stats.avgSpeed + ' mph' : '--';
     document.getElementById('stat-games').textContent   = stats.totalGames;
+    ['stat-avg-window', 'stat-strikes-window', 'stat-spares-window', 'stat-speed-window'].forEach(id => {
+      document.getElementById(id).textContent = windowLabel;
+    });
     renderCharts(stats);
     renderHistory(data);
   } else {
