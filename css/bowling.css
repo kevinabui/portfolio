@@ -1,0 +1,404 @@
+/* ── Bowling Analytics Page ─────────────────────────────────────────────── */
+
+/* Hero */
+.bowl-hero {
+  min-height: 38vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--nav-h) + 48px) 24px 56px;
+}
+.bowl-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(3,105,161,.10) 0%, transparent 70%),
+    linear-gradient(rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px;
+}
+.bowl-hero-content { position: relative; z-index: 1; max-width: 600px; }
+.bowl-eyebrow {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: .6rem;
+}
+.bowl-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  background: linear-gradient(135deg, #0f172a 0%, #0369a1 65%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: .75rem;
+}
+.bowl-sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Stats Bar */
+.stats-bar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  padding: .75rem 1rem;
+  border-right: 1px solid var(--border-soft);
+}
+.stat-card:last-child { border-right: none; }
+.stat-value {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.stat-label {
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-sub);
+}
+
+/* Sections */
+.bowl-section { padding: 72px 0; }
+.bowl-section-alt { background: var(--bg-alt); }
+.section-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: .95rem;
+  margin-top: -.5rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.charts-grid-bottom { margin-bottom: 0; }
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+.chart-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .25rem;
+}
+.chart-sub {
+  font-size: .82rem;
+  color: var(--text-sub);
+  margin-bottom: 1.25rem;
+}
+.chart-wrap { height: 220px; position: relative; }
+.chart-wrap-sm { height: 200px; }
+
+/* Session History */
+.session-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+.session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+.session-meta { display: flex; flex-direction: column; gap: .15rem; }
+.session-date {
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text);
+}
+.session-location {
+  font-size: .8rem;
+  color: var(--text-sub);
+  font-family: 'Fira Code', monospace;
+}
+.delete-session-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-sub);
+  font-size: .75rem;
+  padding: .3rem .7rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.delete-session-btn:hover {
+  border-color: #fca5a5;
+  color: #ef4444;
+}
+
+.game-row {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.game-row:last-child { border-bottom: none; }
+.game-row-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--accent);
+  margin-bottom: .65rem;
+}
+.game-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: .5rem;
+}
+.game-stat {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+.game-stat-label {
+  font-size: .62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-sub);
+}
+.game-stat-val {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-family: 'Fira Code', monospace;
+}
+.game-stat-val.highlight { color: var(--accent); }
+
+/* Log Form */
+.log-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 900px;
+  margin-inline: auto;
+}
+.form-top {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.form-group label {
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+.form-group input,
+.form-group select {
+  padding: .55rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .92rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color var(--transition);
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: var(--accent); }
+
+.game-entry {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--bg-alt);
+}
+.game-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.game-entry-label {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--accent);
+}
+.remove-game-btn {
+  background: none;
+  border: none;
+  color: var(--text-sub);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 .3rem;
+  line-height: 1;
+  transition: color var(--transition);
+}
+.remove-game-btn:hover { color: #ef4444; }
+.game-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .75rem;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Scorecard */
+.scorecard-wrap { max-width: 860px; margin-inline: auto; }
+#scorecard {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr) 1.3fr;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+.sc-frame {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.sc-frame-label {
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  font-size: .62rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-sub);
+  padding: .2rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.sc-balls {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.sc-ball {
+  flex: 1;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: .85rem;
+  font-weight: 700;
+  font-family: 'Fira Code', monospace;
+  color: var(--text);
+  padding: .45rem .2rem;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+  cursor: text;
+}
+.sc-ball:focus { background: var(--accent-soft); }
+.sc-ball.is-strike { color: var(--accent); }
+.sc-ball.is-spare  { color: #10b981; }
+.sc-ball + .sc-ball { border-left: 1px solid var(--border); }
+.sc-total {
+  text-align: center;
+  font-size: .95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  padding: .5rem .25rem;
+  min-height: 2.2rem;
+  font-family: 'Fira Code', monospace;
+}
+.sc-total.pending { color: var(--text-sub); }
+.sc-max-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .6rem;
+  margin-top: .4rem;
+  padding-right: .25rem;
+}
+.sc-max-label {
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-sub);
+  font-family: 'Fira Code', monospace;
+}
+.sc-max-val {
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+  transition: color .2s;
+}
+
+.scorecard-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: .5rem;
+}
+.scorecard-hint {
+  font-size: .78rem;
+  color: var(--text-sub);
+  font-family: 'Fira Code', monospace;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .stat-card:nth-child(3) { border-right: none; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .game-stats-grid { grid-template-columns: repeat(5, 1fr); }
+  .game-fields { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-top { grid-template-columns: 1fr; }
+  .game-stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .game-fields { grid-template-columns: 1fr; }
+  #scorecard { grid-template-columns: repeat(5, 1fr); }
+}

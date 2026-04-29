@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bowling Analytics · Kevin Bui</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/bowling.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">KB<span class="dot">.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#skills">Skills</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bowl-hero">
+    <div class="bowl-hero-bg"></div>
+    <div class="bowl-hero-content">
+      <p class="bowl-eyebrow">Personal Analytics</p>
+      <h1 class="bowl-title">Bowling Stats</h1>
+      <p class="bowl-sub">Tracking my games over time to find patterns and measure improvement. Built with Chart.js.</p>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="stats-bar" id="stats-bar">
+    <div class="container stats-grid">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-avg">--</span>
+        <span class="stat-label">Avg Scratch</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-high">--</span>
+        <span class="stat-label">High Game</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-strikes">--</span>
+        <span class="stat-label">Avg Strikes</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-spares">--</span>
+        <span class="stat-label">Avg Spares</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-speed">--</span>
+        <span class="stat-label">Avg 1st Speed</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-games">0</span>
+        <span class="stat-label">Games Logged</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts (hidden when no data) -->
+  <section class="bowl-section" id="charts-section" style="display:none">
+    <div class="container">
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h2 class="chart-title">Score Over Time</h2>
+          <p class="chart-sub">Scratch score per game with 3-game rolling average</p>
+          <div class="chart-wrap">
+            <canvas id="scoreChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h2 class="chart-title">Ball Speed</h2>
+          <p class="chart-sub">1st and 2nd ball average speed (mph)</p>
+          <div class="chart-wrap">
+            <canvas id="speedChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="charts-grid charts-grid-bottom">
+        <div class="chart-card">
+          <h2 class="chart-title">Frame Breakdown</h2>
+          <p class="chart-sub">Overall strike, spare, and open frame distribution</p>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="breakdownChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h2 class="chart-title">1st Ball Average</h2>
+          <p class="chart-sub">Pins knocked down on first ball per game</p>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="firstBallChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Game History (hidden when no data) -->
+  <section class="bowl-section bowl-section-alt" id="history-section" style="display:none">
+    <div class="container">
+      <h2 class="section-title">Session History</h2>
+      <div id="history-list"></div>
+    </div>
+  </section>
+
+  <!-- Log a Session -->
+  <section class="bowl-section" id="log-section">
+    <div class="container">
+      <h2 class="section-title">Log a Session</h2>
+      <p class="section-sub">Enter your stats from the alley's scoring system after each game.</p>
+
+      <form id="log-form" class="log-form" autocomplete="off">
+        <div class="form-top">
+          <div class="form-group">
+            <label for="log-date">Date</label>
+            <input type="date" id="log-date" required />
+          </div>
+          <div class="form-group">
+            <label for="log-location">Location</label>
+            <input type="text" id="log-location" placeholder="e.g. Kenmore Lanes" required />
+          </div>
+        </div>
+
+        <div id="games-list"></div>
+
+        <div class="form-actions">
+          <button type="button" id="add-game-btn" class="btn btn-outline">+ Add Game</button>
+          <button type="submit" class="btn btn-primary">Save Session</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Live Scorecard -->
+  <section class="bowl-section bowl-section-alt">
+    <div class="container">
+      <h2 class="section-title">Live Scorecard</h2>
+      <p class="section-sub">Practice tool — enter a game ball by ball and watch the score calculate in real time.</p>
+      <div class="scorecard-wrap">
+        <div id="scorecard"></div>
+        <div class="scorecard-controls">
+          <button class="btn btn-outline" id="reset-btn">Reset</button>
+          <p class="scorecard-hint">X for strike &nbsp;·&nbsp; / for spare &nbsp;·&nbsp; - for zero</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Part of <a href="index.html"><strong>Kevin Bui's Portfolio</strong></a> · University of Washington · 2026</p>
+  </footer>
+
+  <script src="js/bowling.js"></script>
+</body>
+</html>
