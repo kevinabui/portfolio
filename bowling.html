@@ -111,6 +111,15 @@
       <h2 class="section-title">Log a Session</h2>
       <p class="section-sub">Enter your stats from the alley's scoring system after each game.</p>
 
+      <div id="log-gate">
+        <p class="gate-label">Enter password to log a session</p>
+        <div class="gate-row">
+          <input type="password" id="gate-input" placeholder="Password" />
+          <button class="btn btn-primary" id="gate-btn">Unlock</button>
+        </div>
+        <p class="gate-error" id="gate-error"></p>
+      </div>
+
       <datalist id="lane-suggestions">
         <option value="Husky Union Building" />
         <option value="West Side Lanes Olympia" />
@@ -124,7 +133,7 @@
         <option value="Totem Bowl Mountlake Terrace" />
       </datalist>
 
-      <form id="log-form" class="log-form">
+      <form id="log-form" class="log-form" style="display:none">
         <div class="form-top">
           <div class="form-group">
             <label for="log-date">Date</label>

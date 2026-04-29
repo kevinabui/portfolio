@@ -590,8 +590,38 @@ function initScorecard() {
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), { passive: true });
 })();
 
+// ── Log Gate ──────────────────────────────────────────────────────────────
+function initGate() {
+  const gate  = document.getElementById('log-gate');
+  const form  = document.getElementById('log-form');
+  const input = document.getElementById('gate-input');
+  const btn   = document.getElementById('gate-btn');
+  const err   = document.getElementById('gate-error');
+
+  function unlock() {
+    gate.style.display = 'none';
+    form.style.display = '';
+    sessionStorage.setItem('bowl_unlocked', '1');
+  }
+
+  if (sessionStorage.getItem('bowl_unlocked') === '1') { unlock(); return; }
+
+  btn.addEventListener('click', () => {
+    if (input.value === 'K20053634!') {
+      unlock();
+    } else {
+      err.textContent = 'Incorrect password.';
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 const data = loadData();
 renderAll(data);
 initLogForm(data);
 initScorecard();
+initGate();
