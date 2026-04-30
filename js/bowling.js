@@ -197,14 +197,14 @@ function renderCharts(stats) {
           data: games.map(g => g.firstBallSpeed || null),
           borderColor: '#0369a1', backgroundColor: 'rgba(3,105,161,.07)',
           borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#0369a1',
-          tension: 0.3, fill: true,
+          tension: 0.3, fill: true, spanGaps: true,
         },
         {
           label: '2nd Ball',
           data: games.map(g => g.secondBallSpeed || null),
           borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,.07)',
           borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#10b981',
-          tension: 0.3, fill: true,
+          tension: 0.3, fill: true, spanGaps: true,
         },
       ],
     },
@@ -905,6 +905,7 @@ function initLaneAnimation() {
   let nextTimer = null;
 
   function playShot() {
+    if (window._bowlLoopPaused) return;
     clearTimeout(pinTimer);
     clearTimeout(nextTimer);
     trailActive = false;
@@ -938,7 +939,118 @@ function initLaneAnimation() {
     nextTimer = setTimeout(playShot, DURATION + 1200);
   }
 
+  window._bowlLoopPaused = false;
+  window._bowlPlay = playShot;
   setTimeout(playShot, 800);
+}
+
+// ── Cinematic Scroll ──────────────────────────────────────────────────────
+function initCinematicScroll() {
+  const hero    = document.querySelector('.bowl-hero');
+  const content = document.querySelector('.bowl-hero-content');
+  const lane    = document.querySelector('.hero-lane');
+  const ball    = document.querySelector('.lane-ball');
+  const pins    = document.querySelectorAll('.lp');
+  if (!hero || !content || !lane) return;
+
+  // How far each pin flies (local coords, amplified by lane scale at impact)
+  const SCATTER = [
+    { dx:  55, dy:  -8,  rot:  720 }, // 1 head
+    { dx:  38, dy: -52,  rot: -540 }, // 2
+    { dx:  42, dy:  44,  rot:  600 }, // 3
+    { dx:  18, dy: -88,  rot: -720 }, // 4
+    { dx:  28, dy: -28,  rot:  480 }, // 5
+    { dx:  32, dy:  76,  rot: -600 }, // 6
+    { dx: -28, dy: -120, rot:  900 }, // 7
+    { dx:   5, dy: -58,  rot: -480 }, // 8
+    { dx:   8, dy:  58,  rot:  540 }, // 9
+    { dx: -18, dy: 108,  rot: -720 }, // 10
+  ];
+
+  let strikeTriggered = false;
+
+  function scatterPins() {
+    pins.forEach((pin, i) => {
+      pin.style.animation = 'none';
+      const d = SCATTER[i];
+      pin.animate(
+        [
+          { transform: 'translate(0,0) scale(1)',                                          opacity: 1 },
+          { transform: `translate(${d.dx}px,${d.dy}px) scale(0.3) rotate(${d.rot}deg)`,   opacity: 0 },
+        ],
+        { duration: 520, easing: 'ease-in', fill: 'forwards' }
+      );
+    });
+  }
+
+  function fireCinematicShot() {
+    window._bowlLoopPaused = true;
+
+    // reset pins to standing
+    pins.forEach(pin => {
+      pin.getAnimations().forEach(a => a.cancel());
+      pin.style.opacity   = '1';
+      pin.style.transform = '';
+      pin.style.animation = 'none';
+    });
+
+    if (ball) {
+      ball.style.animation = 'none';
+      void ball.offsetWidth;
+      ball.style.animation = 'bowlHook 2.5s linear 1 forwards';
+    }
+
+    // scatter pins at 76% of 2.5 s = 1.9 s
+    setTimeout(scatterPins, 2500 * 0.76);
+
+    // resume loop after scatter settles
+    setTimeout(() => {
+      window._bowlLoopPaused = false;
+      if (window._bowlPlay) window._bowlPlay();
+    }, 2500 + 2000);
+  }
+
+  function resetCinematic() {
+    strikeTriggered = false;
+    pins.forEach(pin => {
+      pin.getAnimations().forEach(a => a.cancel());
+      pin.style.opacity   = '1';
+      pin.style.transform = '';
+      pin.style.animation = 'none';
+    });
+    window._bowlLoopPaused = false;
+    if (window._bowlPlay) window._bowlPlay();
+  }
+
+  function onScroll() {
+    const scrolled = window.scrollY - hero.offsetTop;
+    const range    = hero.offsetHeight - window.innerHeight;
+    const p        = Math.max(0, Math.min(1, scrolled / range));
+
+    // Phase 1 — content fades out as lane zooms (p 0 → 0.3)
+    const p1 = Math.max(0, Math.min(1, p / 0.3));
+    content.style.opacity   = String((1 - p1).toFixed(3));
+    content.style.transform = `translateY(${(-p1 * 28).toFixed(1)}px)`;
+
+    // Phase 2 — lane zooms up (p 0.12 → 0.72)
+    const p2    = Math.max(0, Math.min(1, (p - 0.12) / 0.60));
+    const scale = 1 + p2 * 6.5;
+    lane.style.transform = `scale(${scale.toFixed(3)})`;
+
+    // Phase 3 — cinematic strike fires once at p ≈ 0.58
+    if (!strikeTriggered && p >= 0.58) {
+      strikeTriggered = true;
+      fireCinematicShot();
+    }
+
+    // Reset when user scrolls back to top of hero
+    if (strikeTriggered && p < 0.1) {
+      resetCinematic();
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────
@@ -949,4 +1061,5 @@ initScorecard();
 initGate();
 initReveal();
 initLaneAnimation();
+initCinematicScroll();
 if (computeStats(data)) animateStats(computeStats(data));

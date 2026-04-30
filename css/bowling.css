@@ -2,13 +2,18 @@
 
 /* Hero */
 .bowl-hero {
-  min-height: 38vh;
+  height: 220vh;
+  position: relative;
+}
+.bowl-hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: relative;
-  overflow: hidden;
   padding: calc(var(--nav-h) + 48px) 24px 56px;
 }
 .bowl-hero-bg {
@@ -19,7 +24,7 @@
     linear-gradient(rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px,
     linear-gradient(90deg, rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px;
 }
-.bowl-hero-content { position: relative; z-index: 1; max-width: 600px; }
+.bowl-hero-content { position: relative; z-index: 5; max-width: 600px; will-change: opacity, transform; }
 .bowl-eyebrow {
   font-size: .85rem;
   font-weight: 600;
@@ -489,7 +494,7 @@
 }
 
 /* ── Hero Lane Animation ─────────────────────────────────────────────────── */
-.bowl-hero { padding-bottom: 100px; }
+.bowl-hero-stage { padding-bottom: 100px; }
 
 .hero-lane {
   position: absolute;
@@ -497,6 +502,8 @@
   height: 100px;
   pointer-events: none;
   overflow: hidden;
+  transform-origin: 50% 100%;
+  will-change: transform;
   /* 39 maple boards running lengthwise (ball direction): horizontal stripes */
   background:
     radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,250,220,.10) 0%, transparent 70%),
