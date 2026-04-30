@@ -737,19 +737,60 @@ function initReveal() {
 function initLaneAnimation() {
   const ball = document.querySelector('.lane-ball');
   const pins = document.querySelectorAll('.lp');
-  if (!ball || !pins.length) return;
+  const lane = document.querySelector('.hero-lane');
+  if (!ball || !pins.length || !lane) return;
 
   const DURATION = 8000;
-  const IMPACT   = 0.52;
+  const IMPACT   = 0.76; // ball reaches pins (left:78%) at 76% of shot
 
   const shots = [
-    { anim: 'bowlStraight',  strike: true  },
-    { anim: 'bowlStraight',  strike: true  },
-    { anim: 'bowlHook',      strike: true  },
-    { anim: 'bowlHook',      strike: true  },
-    { anim: 'bowlHeavyHook', strike: true  },
-    { anim: 'bowlGutter',    strike: false },
+    { anim: 'bowlStraight',  strike: true,  color: 'rgba(147,197,253,' },
+    { anim: 'bowlStraight',  strike: true,  color: 'rgba(147,197,253,' },
+    { anim: 'bowlHook',      strike: true,  color: 'rgba(251,191,36,'  },
+    { anim: 'bowlHook',      strike: true,  color: 'rgba(251,191,36,'  },
+    { anim: 'bowlHeavyHook', strike: true,  color: 'rgba(248,113,113,' },
+    { anim: 'bowlGutter',    strike: false, color: 'rgba(148,163,184,' },
   ];
+
+  // ── Trail canvas ─────────────────────────────────────────────────────────
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+  lane.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas() { canvas.width = lane.offsetWidth; canvas.height = lane.offsetHeight; }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
+  const TRAIL_MS  = 3000;
+  let trailPoints = [];
+  let trailColor  = 'rgba(147,197,253,';
+  let trailActive = false;
+
+  function drawTrail(ts) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    while (trailPoints.length && ts - trailPoints[0].t > TRAIL_MS) trailPoints.shift();
+    if (trailActive) {
+      const br = ball.getBoundingClientRect(), lr = lane.getBoundingClientRect();
+      trailPoints.push({ x: br.left - lr.left + br.width * .5, y: br.top - lr.top + br.height * .5, t: ts });
+    }
+    const n = trailPoints.length;
+    if (n > 1) {
+      for (let i = 1; i < n; i++) {
+        const pos = i / n;
+        const age = 1 - (ts - trailPoints[i].t) / TRAIL_MS;
+        ctx.beginPath();
+        ctx.moveTo(trailPoints[i - 1].x, trailPoints[i - 1].y);
+        ctx.lineTo(trailPoints[i].x,     trailPoints[i].y);
+        ctx.strokeStyle = trailColor + (pos * age * 0.55) + ')';
+        ctx.lineWidth   = pos * 3.5 + 0.5;
+        ctx.lineCap     = 'round';
+        ctx.stroke();
+      }
+    }
+    requestAnimationFrame(drawTrail);
+  }
+  requestAnimationFrame(drawTrail);
+  // ── End trail ────────────────────────────────────────────────────────────
 
   let pinTimer  = null;
   let nextTimer = null;
@@ -757,6 +798,8 @@ function initLaneAnimation() {
   function playShot() {
     clearTimeout(pinTimer);
     clearTimeout(nextTimer);
+    trailActive = false;
+    trailPoints = [];
 
     pins.forEach(lp => {
       lp.style.animation = 'none';
@@ -768,7 +811,11 @@ function initLaneAnimation() {
     void ball.offsetWidth;
 
     const shot = shots[Math.floor(Math.random() * shots.length)];
+    trailColor = shot.color;
     ball.style.animation = `${shot.anim} ${DURATION / 1000}s linear 1 forwards`;
+
+    setTimeout(() => { trailActive = true;  }, 350);
+    setTimeout(() => { trailActive = false; }, DURATION * 0.86);
 
     if (shot.strike) {
       pinTimer = setTimeout(() => {
