@@ -86,30 +86,64 @@
   <!-- Charts (hidden when no data) -->
   <section class="bowl-section" id="charts-section" style="display:none">
     <div class="container">
+
+      <!-- Row 1: Score trend + Strike Rate % -->
       <div class="charts-grid">
         <div class="chart-card reveal">
           <h2 class="chart-title">Score Over Time</h2>
-          <p class="chart-sub">Scratch score per game with 3-game rolling average</p>
+          <p class="chart-sub">Scratch per game · rolling avg green when above season avg · PB line</p>
           <div class="chart-wrap">
             <canvas id="scoreChart"></canvas>
           </div>
         </div>
         <div class="chart-card reveal">
+          <h2 class="chart-title">Strike Rate %</h2>
+          <p class="chart-sub">Strikes per game out of 12 possible, with 3-game rolling avg</p>
+          <div class="chart-wrap">
+            <canvas id="strikeRateChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Score Distribution + Ball Speed -->
+      <div class="charts-grid">
+        <div class="chart-card reveal">
+          <h2 class="chart-title">Score Distribution</h2>
+          <p class="chart-sub">How often you land in each scoring range</p>
+          <div class="chart-wrap">
+            <canvas id="distChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card reveal">
           <h2 class="chart-title">Ball Speed</h2>
-          <p class="chart-sub">1st and 2nd ball average speed (mph)</p>
+          <p class="chart-sub">1st and 2nd ball avg speed per game (mph)</p>
           <div class="chart-wrap">
             <canvas id="speedChart"></canvas>
           </div>
         </div>
       </div>
+
+      <!-- Row 3: By Location — shown only when multiple alleys logged -->
+      <div id="location-row" style="display:none">
+        <div class="chart-card reveal" style="max-width:640px;margin:0 auto 1.5rem">
+          <h2 class="chart-title">By Location</h2>
+          <p class="chart-sub">Average score at each bowling alley</p>
+          <div class="chart-wrap">
+            <canvas id="locationChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: Frame Breakdown -->
       <div class="charts-grid-single">
         <div class="chart-card reveal">
           <h2 class="chart-title">Frame Breakdown</h2>
-          <p class="chart-sub">Avg strikes, spares &amp; opens per game (last 15)</p>
+          <p class="chart-sub">Avg strikes, spares &amp; opens per game (last 15) — hover a pin</p>
           <div id="pinDiagram" class="pin-diagram-wrap"></div>
           <div id="pinLegend" class="pin-legend"></div>
         </div>
       </div>
+
     </div>
   </section>
 

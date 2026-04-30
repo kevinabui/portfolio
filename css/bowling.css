@@ -737,6 +737,15 @@
 .pd-spare  { background:#10b981;            box-shadow:0 0 10px rgba(16,185,129,.4);  border:2px solid transparent; }
 .pd-open   { background:#e2e8f0;            border:2px solid #cbd5e1; }
 
+.pd-pin {
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.pd-pin:hover                { transform: scale(1.35); }
+.pd-pin.pd-strike:hover      { box-shadow: 0 0 18px rgba(3,105,161,.80); }
+.pd-pin.pd-spare:hover       { box-shadow: 0 0 18px rgba(16,185,129,.80); }
+.pd-pin.pd-open:hover        { box-shadow: 0 0 12px rgba(148,163,184,.60); }
+
 .pin-legend {
   display:flex;
   justify-content:center;

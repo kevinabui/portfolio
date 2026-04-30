@@ -70,12 +70,16 @@ function destroyChart(id) {
 
 // ── Render charts ─────────────────────────────────────────────────────────
 function renderCharts(stats) {
-  const games  = stats.games;
-  const labels = games.map((_, i) => `G${i + 1}`);
-
-  // Score trend
-  destroyChart('score');
+  const games     = stats.games;
+  const labels    = games.map((_, i) => `G${i + 1}`);
   const scratches = games.map(g => g.scratch || null);
+  const validScr  = scratches.filter(Boolean);
+  const highGame  = validScr.length ? Math.max(...validScr) : 0;
+  const seasonAvg = validScr.length
+    ? Math.round(validScr.reduce((a, b) => a + b, 0) / validScr.length) : 0;
+
+  // ── 1. Score Over Time: PB + season avg + colored rolling avg ────────────
+  destroyChart('score');
   charts['score'] = new Chart(document.getElementById('scoreChart'), {
     type: 'line',
     data: {
@@ -86,28 +90,102 @@ function renderCharts(stats) {
           data: scratches,
           borderColor: '#0369a1',
           backgroundColor: 'rgba(3,105,161,.07)',
-          borderWidth: 2,
-          pointRadius: 4,
-          pointBackgroundColor: '#0369a1',
-          tension: 0.3,
-          fill: true,
+          borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#0369a1',
+          tension: 0.3, fill: true, order: 2,
         },
         {
           label: '3-Game Avg',
-          data: rollingAvg(scratches.filter(Boolean)),
-          borderColor: '#f97316',
-          borderWidth: 2,
-          borderDash: [5, 4],
-          pointRadius: 0,
-          tension: 0.4,
-          fill: false,
+          data: rollingAvg(validScr),
+          borderWidth: 2.5, pointRadius: 0, tension: 0.4,
+          fill: false, order: 1,
+          segment: { borderColor: ctx => ctx.p1.parsed.y >= seasonAvg ? '#10b981' : '#f97316' },
+        },
+        {
+          label: `PB · ${highGame}`,
+          data: new Array(labels.length).fill(highGame),
+          borderColor: 'rgba(251,191,36,.65)', borderWidth: 1.5,
+          borderDash: [6, 4], pointRadius: 0, fill: false, order: 3,
+        },
+        {
+          label: `Avg · ${seasonAvg}`,
+          data: new Array(labels.length).fill(seasonAvg),
+          borderColor: 'rgba(148,163,184,.45)', borderWidth: 1,
+          borderDash: [3, 3], pointRadius: 0, fill: false, order: 4,
         },
       ],
     },
     options: chartOptions({ yMin: 60, unit: '' }),
   });
 
-  // Ball speed
+  // ── 2. Strike Rate % ─────────────────────────────────────────────────────
+  destroyChart('strikeRate');
+  const strikeRates = games.map(g => g.strikes != null ? +(g.strikes / 12 * 100).toFixed(1) : null);
+  const validSR     = strikeRates.filter(Boolean);
+  charts['strikeRate'] = new Chart(document.getElementById('strikeRateChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Strike %',
+          data: strikeRates,
+          borderColor: '#0369a1', backgroundColor: 'rgba(3,105,161,.07)',
+          borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#0369a1',
+          tension: 0.3, fill: true,
+        },
+        {
+          label: '3-Game Avg',
+          data: validSR.length ? rollingAvg(validSR) : [],
+          borderColor: '#f97316', borderWidth: 2, borderDash: [5, 4],
+          pointRadius: 0, tension: 0.4, fill: false,
+        },
+      ],
+    },
+    options: chartOptions({ yMin: 0, yMax: 100, unit: '%' }),
+  });
+
+  // ── 3. Score Distribution histogram ──────────────────────────────────────
+  destroyChart('dist');
+  const buckets    = ['<120', '120–139', '140–159', '160–179', '180–199', '200–219', '220–239', '240+'];
+  const counts     = new Array(8).fill(0);
+  const distColors = ['#94a3b8','#64748b','#f97316','#eab308','#22c55e','#10b981','#0369a1','#7c3aed'];
+  validScr.forEach(s => {
+    if      (s < 120) counts[0]++;
+    else if (s < 140) counts[1]++;
+    else if (s < 160) counts[2]++;
+    else if (s < 180) counts[3]++;
+    else if (s < 200) counts[4]++;
+    else if (s < 220) counts[5]++;
+    else if (s < 240) counts[6]++;
+    else              counts[7]++;
+  });
+  charts['dist'] = new Chart(document.getElementById('distChart'), {
+    type: 'bar',
+    data: {
+      labels: buckets,
+      datasets: [{
+        label: 'Games',
+        data: counts,
+        backgroundColor: distColors.map(c => c + 'bb'),
+        borderColor: distColors,
+        borderWidth: 1.5,
+        borderRadius: 5,
+      }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw} game${ctx.raw !== 1 ? 's' : ''}` } },
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Fira Code', size: 11 } }, grid: { color: 'rgba(15,23,42,.05)' } },
+        x: { grid: { display: false }, ticks: { font: { family: 'Fira Code', size: 10 } } },
+      },
+    },
+  });
+
+  // ── 4. Ball Speed ─────────────────────────────────────────────────────────
   destroyChart('speed');
   charts['speed'] = new Chart(document.getElementById('speedChart'), {
     type: 'line',
@@ -117,30 +195,61 @@ function renderCharts(stats) {
         {
           label: '1st Ball',
           data: games.map(g => g.firstBallSpeed || null),
-          borderColor: '#0369a1',
-          backgroundColor: 'rgba(3,105,161,.07)',
-          borderWidth: 2,
-          pointRadius: 4,
-          pointBackgroundColor: '#0369a1',
-          tension: 0.3,
-          fill: true,
+          borderColor: '#0369a1', backgroundColor: 'rgba(3,105,161,.07)',
+          borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#0369a1',
+          tension: 0.3, fill: true,
         },
         {
           label: '2nd Ball',
           data: games.map(g => g.secondBallSpeed || null),
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16,185,129,.07)',
-          borderWidth: 2,
-          pointRadius: 4,
-          pointBackgroundColor: '#10b981',
-          tension: 0.3,
-          fill: true,
+          borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,.07)',
+          borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#10b981',
+          tension: 0.3, fill: true,
         },
       ],
     },
     options: chartOptions({ yMin: 0, unit: ' mph' }),
   });
 
+  // ── 5. By Location (only when multiple alleys logged) ────────────────────
+  destroyChart('location');
+  const locMap = {};
+  games.forEach(g => {
+    const loc = g.location || 'Unknown';
+    if (!locMap[loc]) locMap[loc] = [];
+    if (g.scratch) locMap[loc].push(g.scratch);
+  });
+  const locKeys = Object.keys(locMap);
+  const locRow  = document.getElementById('location-row');
+  if (locKeys.length > 1 && locRow) {
+    locRow.style.display = '';
+    const locLabels = locKeys.map(k => k.length > 22 ? k.slice(0, 21) + '…' : k);
+    const locAvgs   = locKeys.map(k => {
+      const arr = locMap[k];
+      return arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+    });
+    const locCounts = locKeys.map(k => locMap[k].length);
+    const locOpts   = chartOptions({ yMin: 60, unit: '' });
+    locOpts.plugins.tooltip = {
+      callbacks: { label: ctx => ` Avg ${ctx.raw} · ${locCounts[ctx.dataIndex]} games` },
+    };
+    charts['location'] = new Chart(document.getElementById('locationChart'), {
+      type: 'bar',
+      data: {
+        labels: locLabels,
+        datasets: [{
+          label: 'Avg Score', data: locAvgs,
+          backgroundColor: 'rgba(3,105,161,.70)', borderColor: '#0369a1',
+          borderWidth: 1.5, borderRadius: 6,
+        }],
+      },
+      options: locOpts,
+    });
+  } else if (locRow) {
+    locRow.style.display = 'none';
+  }
+
+  // ── 6. Pin Diagram ────────────────────────────────────────────────────────
   renderPinDiagram(stats);
 }
 
