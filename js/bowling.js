@@ -204,15 +204,19 @@ function renderHistory(data) {
 
   const fmt = d => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const locationLabel = loc => loc.toLowerCase().includes('husky') ? `🐾 ${loc}` : loc;
+  const allHighGame = Math.max(...data.sessions.flatMap(s => s.games.map(g => g.scratch || 0)));
 
   [...data.sessions].reverse().forEach((session, idx) => {
-    const isFirst = idx === 0;
+    const isFirst   = idx === 0;
+    const isUW      = session.location.toLowerCase().includes('husky');
+    const scratches = session.games.map(g => g.scratch || 0);
     const avgScratch = session.games.filter(g => g.scratch).length
       ? Math.round(session.games.reduce((a, g) => a + (g.scratch || 0), 0) / session.games.filter(g => g.scratch).length)
       : null;
+    const isPB = allHighGame > 0 && Math.max(...scratches) === allHighGame;
 
     const card = document.createElement('div');
-    card.className = 'session-card' + (isFirst ? ' session-open' : ' session-collapsed');
+    card.className = 'session-card' + (isFirst ? ' session-open' : ' session-collapsed') + (isUW ? ' session-uw' : '');
 
     card.innerHTML = `
       <div class="session-header session-toggle">
@@ -221,6 +225,7 @@ function renderHistory(data) {
           <span class="session-location">${locationLabel(session.location)}</span>
         </div>
         <div class="session-header-right">
+          ${isPB ? `<span class="pb-badge">🏆 PB</span>` : ''}
           ${avgScratch != null ? `<span class="session-avg">avg ${avgScratch}</span>` : ''}
           <span class="session-chevron">${isFirst ? '▲' : '▼'}</span>
           <button class="delete-session-btn" data-id="${session.id}">Delete</button>
@@ -306,6 +311,13 @@ function renderAll(data) {
     renderHistory(data);
     initReveal();
     animateStats(stats);
+    // bounce pins after diagram renders
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.pd-pin').forEach((pin, i) => {
+        pin.style.animation = `pinBounce .45s ${i * 45}ms ease-out`;
+        pin.addEventListener('animationend', () => { pin.style.animation = ''; }, { once: true });
+      });
+    });
   } else {
     document.getElementById('stat-avg').textContent     = '--';
     document.getElementById('stat-high').textContent    = '--';
@@ -605,6 +617,14 @@ function initScorecard() {
         if (val === null) { inp.value = ''; return; }
         state[fi].balls[bi] = val;
         updateDisplay();
+        // strike flash
+        if (val === 10 && bi === 0 && fi < 9) {
+          inp.classList.add('flash-strike');
+          inp.addEventListener('animationend', () => inp.classList.remove('flash-strike'), { once: true });
+        }
+        // perfect game easter egg
+        const scores = computeRunningScores(state);
+        if (scores[9] === 300) showConfetti();
         const all = [...container.querySelectorAll('.sc-ball')];
         const idx = all.indexOf(inp);
         if (idx < all.length - 1) all[idx + 1].focus();
@@ -655,6 +675,29 @@ function initGate() {
   });
 
   input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+}
+
+// ── Confetti ──────────────────────────────────────────────────────────────
+function showConfetti() {
+  const wrap = document.createElement('div');
+  wrap.className = 'confetti-wrap';
+  document.body.appendChild(wrap);
+  const colors = ['#0369a1','#10b981','#f97316','#f59e0b','#8b5cf6','#ef4444','#06b6d4'];
+  for (let i = 0; i < 80; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1.2+Math.random()*1.8}s;
+      animation-delay:${Math.random()*0.6}s;
+      transform:rotate(${Math.random()*360}deg);
+      width:${6+Math.random()*6}px;
+      height:${8+Math.random()*8}px;
+    `;
+    wrap.appendChild(p);
+  }
+  setTimeout(() => wrap.remove(), 4000);
 }
 
 // ── Count-up animation ────────────────────────────────────────────────────

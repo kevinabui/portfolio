@@ -493,12 +493,23 @@
 
 .hero-lane {
   position: absolute;
-  bottom: 0;
-  left: 0; right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 72px;
   pointer-events: none;
   overflow: hidden;
 }
+/* gutters */
+.hero-lane::before, .hero-lane::after {
+  content: '';
+  position: absolute;
+  top: 6px; bottom: 6px;
+  width: 28px;
+  background: rgba(15,23,42,.10);
+  border-radius: 4px;
+  border: 1px solid rgba(15,23,42,.07);
+}
+.hero-lane::before { left: 6%; }
+.hero-lane::after  { right: 6%; }
 
 .lane-ball {
   position: absolute;
@@ -519,58 +530,54 @@
   box-shadow: 8px 1px 0 rgba(255,255,255,.10), 2px 10px 0 rgba(255,255,255,.09);
 }
 
+/* Equilateral triangle: pin 1 (head pin) left, 2-3 behind, 4-5-6, 7-8-9-10 */
 .lane-pins {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-16px, -50%);
-  display: grid;
-  grid-template-columns: repeat(4, 12px);
-  grid-template-rows: repeat(7, 12px);
-  gap: 4px;
+  transform: translate(-4px, -35px);
+  width: 62px;
+  height: 71px;
 }
 .lp {
-  display: block;
+  position: absolute;
   width: 10px; height: 10px;
   border-radius: 50%;
   background: #f8fafc;
   border: 1.5px solid #94a3b8;
   box-shadow: 0 1px 3px rgba(15,23,42,.18);
 }
-
-/* rotated triangle: ball comes from left, hits pin 1 (head pin) first */
-.lp1  { grid-column:1; grid-row:4; animation: pinS1  5.5s 1s ease-in infinite; }
-.lp2  { grid-column:2; grid-row:3; animation: pinS2  5.5s 1s ease-in infinite; }
-.lp3  { grid-column:2; grid-row:5; animation: pinS3  5.5s 1s ease-in infinite; }
-.lp4  { grid-column:3; grid-row:2; animation: pinS4  5.5s 1s ease-in infinite; }
-.lp5  { grid-column:3; grid-row:4; animation: pinS5  5.5s 1s ease-in infinite; }
-.lp6  { grid-column:3; grid-row:6; animation: pinS6  5.5s 1s ease-in infinite; }
-.lp7  { grid-column:4; grid-row:1; animation: pinS7  5.5s 1s ease-in infinite; }
-.lp8  { grid-column:4; grid-row:3; animation: pinS8  5.5s 1s ease-in infinite; }
-.lp9  { grid-column:4; grid-row:5; animation: pinS9  5.5s 1s ease-in infinite; }
-.lp10 { grid-column:4; grid-row:7; animation: pinS10 5.5s 1s ease-in infinite; }
+.lp1  { left: 0px;  top: 30px; animation: pinS1  5.5s 1s ease-in infinite; }
+.lp2  { left: 17px; top: 20px; animation: pinS2  5.5s 1s ease-in infinite; }
+.lp3  { left: 17px; top: 40px; animation: pinS3  5.5s 1s ease-in infinite; }
+.lp4  { left: 34px; top: 10px; animation: pinS4  5.5s 1s ease-in infinite; }
+.lp5  { left: 34px; top: 30px; animation: pinS5  5.5s 1s ease-in infinite; }
+.lp6  { left: 34px; top: 50px; animation: pinS6  5.5s 1s ease-in infinite; }
+.lp7  { left: 51px; top: 0px;  animation: pinS7  5.5s 1s ease-in infinite; }
+.lp8  { left: 51px; top: 20px; animation: pinS8  5.5s 1s ease-in infinite; }
+.lp9  { left: 51px; top: 40px; animation: pinS9  5.5s 1s ease-in infinite; }
+.lp10 { left: 51px; top: 60px; animation: pinS10 5.5s 1s ease-in infinite; }
 
 @keyframes bowlRoll {
-  0%   { left:-5%;  opacity:0; transform:rotate(0deg); }
-  6%   { opacity:1; }
-  52%  { left:46%;  transform:rotate(480deg); }
-  58%  { left:50%;  transform:rotate(530deg); }
-  86%  { left:104%; opacity:0; transform:rotate(720deg); }
-  99%  { left:-5%;  opacity:0; transform:rotate(0deg); }
-  100% { left:-5%;  opacity:0; transform:rotate(0deg); }
+  0%   { left: -5%;               opacity: 0; transform: rotate(0deg); }
+  6%   {                           opacity: 1; }
+  52%  { left: calc(50% - 20px);  transform: rotate(480deg); }
+  58%  { left: calc(50% + 10px);  transform: rotate(530deg); }
+  86%  { left: 104%;              opacity: 0; transform: rotate(720deg); }
+  99%  { left: -5%;               opacity: 0; transform: rotate(0deg); }
+  100% { left: -5%;               opacity: 0; transform: rotate(0deg); }
 }
 
-/* Pins hold until 52% of 5.5s ≈ 2.86s, then scatter */
-@keyframes pinS1  { 0%,52%{transform:translate(0,0);opacity:1} 80%{transform:translate(22px,4px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS2  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(-8px,-22px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS3  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(-8px,22px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS4  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,-32px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS1  { 0%,52%{transform:translate(0,0);opacity:1} 80%{transform:translate(20px,0px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS2  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,-22px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS3  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,22px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS4  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(15px,-32px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
 @keyframes pinS5  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(28px,0px);opacity:0}    99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS6  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,32px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS7  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(14px,-38px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS8  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(32px,-14px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS9  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(32px,14px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS10 { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(14px,38px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS6  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(15px,32px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS7  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(18px,-40px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS8  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(35px,-18px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS9  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(35px,18px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes pinS10 { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(18px,40px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
 
 /* ── 10-Pin Diagram ──────────────────────────────────────────────────────── */
 .pin-diagram-wrap {
@@ -627,6 +634,63 @@
   100% { transform: scale(1); }
 }
 .stat-value.counting { animation: statPop .35s ease-out; }
+
+/* ── Strike flash on scorecard ───────────────────────────────────────────── */
+@keyframes strikeFlash {
+  0%   { background: transparent; }
+  30%  { background: rgba(3,105,161,.18); box-shadow: inset 0 0 8px rgba(3,105,161,.25); }
+  100% { background: transparent; }
+}
+.sc-ball.flash-strike { animation: strikeFlash .4s ease-out; }
+
+/* ── Pin bounce on new data ──────────────────────────────────────────────── */
+@keyframes pinBounce {
+  0%,100% { transform: scale(1); }
+  45%     { transform: scale(1.3); }
+}
+
+/* ── Perfect game confetti ───────────────────────────────────────────────── */
+.confetti-wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  width: 8px; height: 10px;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ── UW Husky session styling ────────────────────────────────────────────── */
+.session-uw .session-header {
+  background: linear-gradient(135deg, #4b2e83 0%, #3a2070 100%);
+  border-bottom-color: rgba(183,165,122,.25);
+}
+.session-uw .session-date   { color: #b7a57a; }
+.session-uw .session-location { color: #d4c5a9; opacity: .9; }
+.session-uw .session-avg    { color: #b7a57a; }
+.session-uw .session-chevron { color: rgba(183,165,122,.7); }
+.session-uw .delete-session-btn { border-color: rgba(183,165,122,.3); color: rgba(183,165,122,.7); }
+.session-uw .delete-session-btn:hover { border-color: #ef4444; color: #ef4444; }
+
+/* ── Personal Best badge ─────────────────────────────────────────────────── */
+.pb-badge {
+  font-size: .68rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #78350f;
+  padding: .18rem .55rem;
+  border-radius: 99px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
 
 /* ── Responsive */
 @media (max-width: 900px) {
