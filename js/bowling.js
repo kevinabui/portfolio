@@ -768,7 +768,7 @@ function initLaneAnimation() {
     void ball.offsetWidth;
 
     const shot = shots[Math.floor(Math.random() * shots.length)];
-    ball.style.animation = `${shot.anim} ${DURATION / 1000}s ease-in-out 1 forwards`;
+    ball.style.animation = `${shot.anim} ${DURATION / 1000}s linear 1 forwards`;
 
     if (shot.strike) {
       pinTimer = setTimeout(() => {
