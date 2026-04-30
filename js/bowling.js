@@ -733,6 +733,58 @@ function initReveal() {
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 }
 
+// ── Lane Ball Animation ───────────────────────────────────────────────────
+function initLaneAnimation() {
+  const ball = document.querySelector('.lane-ball');
+  const pins = document.querySelectorAll('.lp');
+  if (!ball || !pins.length) return;
+
+  const DURATION = 8000;
+  const IMPACT   = 0.52;
+
+  const shots = [
+    { anim: 'bowlStraight',  strike: true  },
+    { anim: 'bowlStraight',  strike: true  },
+    { anim: 'bowlHook',      strike: true  },
+    { anim: 'bowlHook',      strike: true  },
+    { anim: 'bowlHeavyHook', strike: true  },
+    { anim: 'bowlGutter',    strike: false },
+  ];
+
+  let pinTimer  = null;
+  let nextTimer = null;
+
+  function playShot() {
+    clearTimeout(pinTimer);
+    clearTimeout(nextTimer);
+
+    pins.forEach(lp => {
+      lp.style.animation = 'none';
+      lp.style.opacity   = '1';
+      lp.style.transform = '';
+    });
+
+    ball.style.animation = 'none';
+    void ball.offsetWidth;
+
+    const shot = shots[Math.floor(Math.random() * shots.length)];
+    ball.style.animation = `${shot.anim} ${DURATION / 1000}s ease-in-out 1 forwards`;
+
+    if (shot.strike) {
+      pinTimer = setTimeout(() => {
+        pins.forEach((lp, i) => {
+          void lp.offsetWidth;
+          lp.style.animation = `pinS${i + 1} 2.4s ease-in 1 forwards`;
+        });
+      }, DURATION * IMPACT);
+    }
+
+    nextTimer = setTimeout(playShot, DURATION + 1200);
+  }
+
+  setTimeout(playShot, 800);
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 const data = loadData();
 renderAll(data);
@@ -740,4 +792,5 @@ initLogForm(data);
 initScorecard();
 initGate();
 initReveal();
+initLaneAnimation();
 if (computeStats(data)) animateStats(computeStats(data));

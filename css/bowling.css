@@ -489,36 +489,90 @@
 }
 
 /* ── Hero Lane Animation ─────────────────────────────────────────────────── */
-.bowl-hero { padding-bottom: 90px; }
+.bowl-hero { padding-bottom: 100px; }
 
 .hero-lane {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 72px;
+  height: 100px;
   pointer-events: none;
   overflow: hidden;
+  /* 39 maple boards: base wood + 1px dividers + centre highlight */
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,250,220,.10) 0%, transparent 70%),
+    linear-gradient(90deg, transparent calc(100% - 1px), rgba(90,50,10,.28) calc(100% - 1px)),
+    linear-gradient(180deg, #d4a870 0%, #c08848 40%, #b07030 60%, #c08848 80%, #d4a870 100%);
+  background-size: 100% 100%, calc(100% / 39) 100%, 100% 100%;
+  background-repeat: no-repeat, repeat-x, no-repeat;
 }
-/* gutters */
-.hero-lane::before, .hero-lane::after {
+
+/* top gutter channel */
+.hero-lane::before {
   content: '';
   position: absolute;
-  top: 6px; bottom: 6px;
-  width: 28px;
-  background: rgba(15,23,42,.10);
-  border-radius: 4px;
-  border: 1px solid rgba(15,23,42,.07);
+  top: 0; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(180deg, rgba(5,10,25,.60) 0%, rgba(5,10,25,.08) 100%);
+  z-index: 3;
 }
-.hero-lane::before { left: 6%; }
-.hero-lane::after  { right: 6%; }
 
+/* bottom gutter channel */
+.hero-lane::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(0deg, rgba(5,10,25,.60) 0%, rgba(5,10,25,.08) 100%);
+  z-index: 3;
+}
+
+/* foul line */
+.lane-foul-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 5%;
+  width: 2px;
+  background: rgba(255,255,255,.65);
+  z-index: 2;
+}
+
+/* 7 targeting arrows (rangefinders) at ~24% down the lane */
+.lane-arrows {
+  position: absolute;
+  left: 24%;
+  top: 10px;
+  bottom: 10px;
+  width: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 2;
+}
+.lane-arrows i {
+  width: 6px; height: 6px;
+  background: rgba(210,165,55,.65);
+  transform: rotate(45deg);
+  border-radius: 1px;
+  flex-shrink: 0;
+  box-shadow: 0 0 4px rgba(210,165,55,.30);
+}
+.lane-arrows i:nth-child(4) {
+  width: 8px; height: 8px;
+  background: rgba(220,175,60,.85);
+}
+
+/* ball — JS controls animation */
 .lane-ball {
   position: absolute;
   width: 38px; height: 38px;
   border-radius: 50%;
+  left: -5%;
   top: 50%; margin-top: -19px;
+  opacity: 0;
   background: radial-gradient(circle at 38% 32%, #475569, #0f172a);
   box-shadow: 0 4px 14px rgba(15,23,42,.35);
-  animation: bowlRoll 5.5s 1s ease-in-out infinite;
+  z-index: 4;
 }
 .lane-ball::before {
   content: '';
@@ -538,6 +592,7 @@
   transform: translate(-4px, -35px);
   width: 62px;
   height: 71px;
+  z-index: 4;
 }
 .lp {
   position: absolute;
@@ -547,37 +602,70 @@
   border: 1.5px solid #94a3b8;
   box-shadow: 0 1px 3px rgba(15,23,42,.18);
 }
-.lp1  { left: 0px;  top: 30px; animation: pinS1  5.5s 1s ease-in infinite; }
-.lp2  { left: 17px; top: 20px; animation: pinS2  5.5s 1s ease-in infinite; }
-.lp3  { left: 17px; top: 40px; animation: pinS3  5.5s 1s ease-in infinite; }
-.lp4  { left: 34px; top: 10px; animation: pinS4  5.5s 1s ease-in infinite; }
-.lp5  { left: 34px; top: 30px; animation: pinS5  5.5s 1s ease-in infinite; }
-.lp6  { left: 34px; top: 50px; animation: pinS6  5.5s 1s ease-in infinite; }
-.lp7  { left: 51px; top: 0px;  animation: pinS7  5.5s 1s ease-in infinite; }
-.lp8  { left: 51px; top: 20px; animation: pinS8  5.5s 1s ease-in infinite; }
-.lp9  { left: 51px; top: 40px; animation: pinS9  5.5s 1s ease-in infinite; }
-.lp10 { left: 51px; top: 60px; animation: pinS10 5.5s 1s ease-in infinite; }
+.lp1  { left: 0px;  top: 30px; }
+.lp2  { left: 17px; top: 20px; }
+.lp3  { left: 17px; top: 40px; }
+.lp4  { left: 34px; top: 10px; }
+.lp5  { left: 34px; top: 30px; }
+.lp6  { left: 34px; top: 50px; }
+.lp7  { left: 51px; top: 0px;  }
+.lp8  { left: 51px; top: 20px; }
+.lp9  { left: 51px; top: 40px; }
+.lp10 { left: 51px; top: 60px; }
 
-@keyframes bowlRoll {
-  0%   { left: -5%;               opacity: 0; transform: rotate(0deg); }
-  6%   {                           opacity: 1; }
-  52%  { left: calc(50% - 20px);  transform: rotate(480deg); }
-  58%  { left: calc(50% + 10px);  transform: rotate(530deg); }
-  86%  { left: 104%;              opacity: 0; transform: rotate(720deg); }
-  99%  { left: -5%;               opacity: 0; transform: rotate(0deg); }
-  100% { left: -5%;               opacity: 0; transform: rotate(0deg); }
+/* ─ Ball trajectories — JS picks randomly, 8 s each ─ */
+@keyframes bowlStraight {
+  0%        { left: -5%;              transform: translateY(0px)  rotate(0deg);    opacity: 0; }
+  5%        {                                                                        opacity: 1; }
+  52%       { left: calc(50% - 20px); transform: translateY(0px)  rotate(540deg); }
+  58%       { left: calc(50% + 10px); transform: translateY(0px)  rotate(590deg); }
+  86%       { left: 104%;             transform: translateY(0px)  rotate(790deg);  opacity: 0; }
+  99%, 100% { left: -5%;              transform: translateY(0px)  rotate(0deg);    opacity: 0; }
 }
 
-@keyframes pinS1  { 0%,52%{transform:translate(0,0);opacity:1} 80%{transform:translate(20px,0px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS2  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,-22px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS3  { 0%,54%{transform:translate(0,0);opacity:1} 80%{transform:translate(10px,22px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS4  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(15px,-32px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS5  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(28px,0px);opacity:0}    99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS6  { 0%,56%{transform:translate(0,0);opacity:1} 80%{transform:translate(15px,32px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS7  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(18px,-40px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS8  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(35px,-18px);opacity:0}  99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS9  { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(35px,18px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
-@keyframes pinS10 { 0%,58%{transform:translate(0,0);opacity:1} 80%{transform:translate(18px,40px);opacity:0}   99%,100%{transform:translate(0,0);opacity:0} }
+@keyframes bowlHook {
+  0%        { left: -5%;              transform: translateY(18px) rotate(0deg);    opacity: 0; }
+  5%        {                                                                        opacity: 1; }
+  32%       { left: 28%;              transform: translateY(17px) rotate(285deg);  }
+  52%       { left: calc(50% - 20px); transform: translateY(-5px) rotate(490deg);  }
+  58%       { left: calc(50% + 10px); transform: translateY(-7px) rotate(540deg);  }
+  86%       { left: 104%;             transform: translateY(-9px) rotate(760deg);  opacity: 0; }
+  99%, 100% { left: -5%;              transform: translateY(18px) rotate(0deg);    opacity: 0; }
+}
+
+@keyframes bowlHeavyHook {
+  0%        { left: -5%;              transform: translateY(26px)  rotate(0deg);   opacity: 0; }
+  5%        {                                                                        opacity: 1; }
+  22%       { left: 18%;              transform: translateY(25px)  rotate(195deg); }
+  40%       { left: 35%;              transform: translateY(14px)  rotate(370deg); }
+  52%       { left: calc(50% - 20px); transform: translateY(-7px)  rotate(478deg); }
+  58%       { left: calc(50% + 10px); transform: translateY(-9px)  rotate(528deg); }
+  86%       { left: 104%;             transform: translateY(-12px) rotate(760deg); opacity: 0; }
+  99%, 100% { left: -5%;              transform: translateY(26px)  rotate(0deg);   opacity: 0; }
+}
+
+@keyframes bowlGutter {
+  0%        { left: -5%;  transform: translateY(0px)  rotate(0deg);   opacity: 0; }
+  5%        {                                                           opacity: 1; }
+  28%       { left: 23%;  transform: translateY(5px)  rotate(230deg); }
+  48%       { left: 42%;  transform: translateY(18px) rotate(410deg); }
+  62%       { left: 60%;  transform: translateY(27px) rotate(530deg); opacity: .65; }
+  80%       { left: 90%;  transform: translateY(30px) rotate(660deg); opacity: .20; }
+  86%       { left: 104%; transform: translateY(30px) rotate(700deg); opacity: 0;   }
+  99%, 100% { left: -5%;  transform: translateY(0px)  rotate(0deg);   opacity: 0;   }
+}
+
+/* ─ Pin scatter — triggered by JS at impact ─ */
+@keyframes pinS1  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(20px,0px)}   }
+@keyframes pinS2  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(10px,-22px)} }
+@keyframes pinS3  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(10px,22px)}  }
+@keyframes pinS4  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(15px,-32px)} }
+@keyframes pinS5  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(28px,0px)}   }
+@keyframes pinS6  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(15px,32px)}  }
+@keyframes pinS7  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(18px,-40px)} }
+@keyframes pinS8  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(35px,-18px)} }
+@keyframes pinS9  { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(35px,18px)}  }
+@keyframes pinS10 { 0%{opacity:1;transform:translate(0,0)}   100%{opacity:0;transform:translate(18px,40px)}  }
 
 /* ── 10-Pin Diagram ──────────────────────────────────────────────────────── */
 .pin-diagram-wrap {
