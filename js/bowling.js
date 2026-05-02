@@ -162,7 +162,13 @@ function renderCharts(stats) {
   // ── 2. Strike Rate % ─────────────────────────────────────────────────────
   destroyChart('strikeRate');
   const strikeRates = games.map(g => g.strikes != null ? +(g.strikes / 12 * 100).toFixed(1) : null);
-  const validSR     = strikeRates.filter(Boolean);
+  const validSR     = strikeRates.filter(v => v != null);
+  const srAvg       = validSR.length ? +(validSR.reduce((a, b) => a + b, 0) / validSR.length).toFixed(1) : 0;
+  // Rolling avg aligned to all games (handles sparse strike data)
+  const srRolling   = strikeRates.map((_, i) => {
+    const win = strikeRates.slice(Math.max(0, i - 2), i + 1).filter(v => v != null);
+    return win.length ? +(win.reduce((a, b) => a + b, 0) / win.length).toFixed(1) : null;
+  });
   charts['strikeRate'] = new Chart(document.getElementById('strikeRateChart'), {
     type: 'line',
     data: {
@@ -173,13 +179,14 @@ function renderCharts(stats) {
           data: strikeRates,
           borderColor: '#0369a1', backgroundColor: 'rgba(3,105,161,.07)',
           borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#0369a1',
-          tension: 0.3, fill: true,
+          tension: 0.3, fill: true, order: 2,
         },
         {
           label: '3-Game Avg',
-          data: validSR.length ? rollingAvg(validSR) : [],
-          borderColor: '#f97316', borderWidth: 2, borderDash: [5, 4],
-          pointRadius: 0, tension: 0.4, fill: false,
+          data: srRolling,
+          borderWidth: 2.5, pointRadius: 0, tension: 0.4,
+          fill: false, order: 1,
+          segment: { borderColor: ctx => ctx.p1.parsed.y >= srAvg ? '#10b981' : '#f97316' },
         },
       ],
     },
@@ -387,6 +394,7 @@ function renderHistory(data) {
           ${isPB ? `<span class="pb-badge">🏆 PB</span>` : ''}
           ${avgScratch != null ? `<span class="session-avg">avg ${avgScratch}</span>` : ''}
           <span class="session-chevron">${isFirst ? '▲' : '▼'}</span>
+          <button class="edit-session-btn" data-id="${session.id}">Edit</button>
           <button class="delete-session-btn" data-id="${session.id}">Delete</button>
         </div>
       </div>
@@ -426,11 +434,17 @@ function renderHistory(data) {
             </div>
           </div>
         `).join('')}
+        ${session.notes ? `<div class="session-notes">${session.notes}</div>` : ''}
       </div>
     `;
 
+    card.querySelector('.edit-session-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      if (window._bowlEdit) window._bowlEdit(session);
+    });
+
     card.querySelector('.session-toggle').addEventListener('click', e => {
-      if (e.target.closest('.delete-session-btn')) return;
+      if (e.target.closest('.delete-session-btn') || e.target.closest('.edit-session-btn')) return;
       const open = card.classList.toggle('session-open');
       card.classList.toggle('session-collapsed', !open);
       card.querySelector('.session-chevron').textContent = open ? '▲' : '▼';
@@ -491,11 +505,15 @@ function renderAll(data) {
 function initLogForm(data) {
   const form      = document.getElementById('log-form');
   const gamesList = document.getElementById('games-list');
+  const notesEl   = document.getElementById('log-notes');
+  const submitBtn = document.getElementById('form-submit-btn');
+  const editInd   = document.getElementById('edit-indicator');
   let gameCount   = 0;
+  let editingId   = null;
 
   document.getElementById('log-date').valueAsDate = new Date();
 
-  function addGame() {
+  function addGame(gameData) {
     gameCount++;
     const idx = gameCount;
     const div = document.createElement('div');
@@ -558,15 +576,54 @@ function initLogForm(data) {
     sparesEl.addEventListener('input', recalcOpens);
 
     gamesList.appendChild(div);
+
+    // Pre-fill if editing
+    if (gameData && typeof gameData === 'object' && !gameData.type) {
+      const set = (name, val) => { if (val != null) div.querySelector(`[name=${name}]`).value = val; };
+      set('scratch', gameData.scratch);
+      set('spares', gameData.spares);
+      set('strikes', gameData.strikes);
+      set('gutters', gameData.gutters);
+      set('firstBallSpeed', gameData.firstBallSpeed);
+      set('secondBallSpeed', gameData.secondBallSpeed);
+      recalcOpens();
+    }
   }
 
   addGame();
-  document.getElementById('add-game-btn').addEventListener('click', addGame);
+  document.getElementById('add-game-btn').addEventListener('click', () => addGame());
+
+  function resetForm() {
+    form.reset();
+    document.getElementById('log-date').valueAsDate = new Date();
+    gamesList.innerHTML = '';
+    gameCount = 0;
+    editingId = null;
+    submitBtn.textContent = 'Save Session';
+    editInd.style.display = 'none';
+    addGame();
+  }
+
+  document.getElementById('cancel-edit-btn').addEventListener('click', resetForm);
+
+  window._bowlEdit = function(session) {
+    editingId = session.id;
+    document.getElementById('log-date').value     = session.date;
+    document.getElementById('log-location').value = session.location;
+    notesEl.value = session.notes || '';
+    gamesList.innerHTML = '';
+    gameCount = 0;
+    session.games.forEach(g => addGame(g));
+    submitBtn.textContent = 'Update Session';
+    editInd.style.display = '';
+    document.getElementById('log-section').scrollIntoView({ behavior: 'smooth' });
+  };
 
   form.addEventListener('submit', e => {
     e.preventDefault();
     const date     = document.getElementById('log-date').value;
     const location = document.getElementById('log-location').value.trim();
+    const notes    = notesEl.value.trim();
     if (!date || !location) return;
 
     const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
@@ -581,17 +638,16 @@ function initLogForm(data) {
       secondBallSpeed: num(entry.querySelector('[name=secondBallSpeed]').value),
     }));
 
-    data.sessions.push({ id: Date.now().toString(), date, location, games });
+    if (editingId) {
+      const idx = data.sessions.findIndex(s => s.id === editingId);
+      if (idx !== -1) data.sessions[idx] = { id: editingId, date, location, notes, games };
+    } else {
+      data.sessions.push({ id: Date.now().toString(), date, location, notes, games });
+    }
+
     saveData(data);
     renderAll(data);
-
-    // Reset form
-    form.reset();
-    document.getElementById('log-date').valueAsDate = new Date();
-    gamesList.innerHTML = '';
-    gameCount = 0;
-    addGame();
-
+    resetForm();
     document.getElementById('history-section').scrollIntoView({ behavior: 'smooth' });
   });
 }
@@ -991,6 +1047,28 @@ function initLaneAnimation() {
   setTimeout(playShot, 800);
 }
 
+// ── Export CSV ────────────────────────────────────────────────────────────
+function exportCSV(data) {
+  const rows = [['Date','Location','Game','Scratch','Strikes','Spares','Opens','Gutters','1st Speed (mph)','2nd Speed (mph)','Notes']];
+  data.sessions.forEach(s => {
+    s.games.forEach((g, i) => {
+      rows.push([
+        s.date, s.location, i + 1,
+        g.scratch ?? '', g.strikes ?? '', g.spares ?? '', g.openFrames ?? '', g.gutters ?? '',
+        g.firstBallSpeed ?? '', g.secondBallSpeed ?? '',
+        i === 0 ? (s.notes || '') : '',
+      ]);
+    });
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const a   = Object.assign(document.createElement('a'), {
+    href:     URL.createObjectURL(new Blob([csv], { type: 'text/csv' })),
+    download: 'bowling-stats.csv',
+  });
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 initScorecard();
 initGate();
@@ -1001,4 +1079,6 @@ initFirebase().then(() => loadData()).then(data => {
   renderAll(data);
   initLogForm(data);
   if (computeStats(data)) animateStats(computeStats(data));
+  const exportBtn = document.getElementById('export-btn');
+  if (exportBtn) exportBtn.addEventListener('click', () => exportCSV(data));
 });

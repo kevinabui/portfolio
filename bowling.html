@@ -187,11 +187,20 @@
           </div>
         </div>
 
+        <div class="form-group form-notes">
+          <label for="log-notes">Session Notes <span class="label-hint">(optional)</span></label>
+          <textarea id="log-notes" rows="2" placeholder="e.g. Tried a new release, lanes were oily…"></textarea>
+        </div>
+
         <div id="games-list"></div>
+
+        <div id="edit-indicator" class="edit-indicator" style="display:none">
+          Editing session &mdash; <button type="button" id="cancel-edit-btn" class="btn-link">cancel</button>
+        </div>
 
         <div class="form-actions">
           <button type="button" id="add-game-btn" class="btn btn-outline">+ Add Game</button>
-          <button type="submit" class="btn btn-primary">Save Session</button>
+          <button type="submit" id="form-submit-btn" class="btn btn-primary">Save Session</button>
         </div>
       </form>
     </div>
@@ -200,7 +209,10 @@
   <!-- Game History (hidden when no data) -->
   <section class="bowl-section" id="history-section" style="display:none">
     <div class="container">
-      <h2 class="section-title">Session History</h2>
+      <div class="section-header-row">
+        <h2 class="section-title">Session History</h2>
+        <button class="btn btn-outline btn-sm" id="export-btn">Export CSV</button>
+      </div>
       <div id="history-list"></div>
     </div>
   </section>

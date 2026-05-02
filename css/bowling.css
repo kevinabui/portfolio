@@ -180,6 +180,29 @@
   color: var(--text-sub);
   font-family: 'Fira Code', monospace;
 }
+.session-notes {
+  margin: 1rem 1.25rem 1rem;
+  padding: .65rem .9rem;
+  background: var(--bg-alt);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: .88rem;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+}
+
+.edit-session-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .25rem .6rem;
+  font-size: .73rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.edit-session-btn:hover { border-color: var(--accent); background: rgba(3,105,161,.07); }
+
 .delete-session-btn {
   background: none;
   border: 1px solid var(--border);
@@ -288,6 +311,44 @@
   cursor: default;
   border-color: transparent;
 }
+.form-group textarea {
+  padding: .55rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .92rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.form-group textarea:focus { border-color: var(--accent); }
+.form-notes { margin-bottom: 1.5rem; }
+
+.edit-indicator {
+  font-size: .83rem;
+  color: var(--text-muted);
+  background: rgba(3,105,161,.07);
+  border: 1px solid rgba(3,105,161,.2);
+  border-radius: var(--radius-sm);
+  padding: .5rem .9rem;
+  margin-bottom: 1rem;
+}
+.btn-link {
+  background: none; border: none; padding: 0;
+  color: var(--accent); cursor: pointer; font-size: inherit;
+  text-decoration: underline;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.section-header-row .section-title { margin: 0; }
+.btn-sm { font-size: .8rem; padding: .4rem .9rem; }
 
 .game-entry {
   border: 1px solid var(--border);
@@ -845,4 +906,10 @@
   .game-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .game-fields { grid-template-columns: 1fr; }
   #scorecard { grid-template-columns: repeat(5, 1fr); }
+  /* Prevent iOS auto-zoom on input focus */
+  .form-group input,
+  .form-group textarea,
+  .form-group select { font-size: 16px; }
+  .section-header-row { flex-wrap: wrap; gap: .75rem; }
+  .log-form { padding: 1.25rem; }
 }
