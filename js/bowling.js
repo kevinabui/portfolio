@@ -2,15 +2,57 @@
 
 const STORAGE_KEY = 'kevin_bowling_v1';
 
-// ── Persistence ───────────────────────────────────────────────────────────
-function loadData() {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    return s ? JSON.parse(s) : { sessions: [] };
-  } catch { return { sessions: [] }; }
+// ── Firebase ──────────────────────────────────────────────────────────────
+firebase.initializeApp({
+  apiKey:            'AIzaSyB7kBe56BuvGA05FrzYgTWXHWYA5X4UoEg',
+  authDomain:        'bowling-stats-tracker-2b8c5.firebaseapp.com',
+  databaseURL:       'https://bowling-stats-tracker-2b8c5-default-rtdb.firebaseio.com',
+  projectId:         'bowling-stats-tracker-2b8c5',
+  storageBucket:     'bowling-stats-tracker-2b8c5.firebasestorage.app',
+  messagingSenderId: '461057628749',
+  appId:             '1:461057628749:web:c9d54ea03a1ca8fa395a04',
+});
+const _db = firebase.database();
+let _userRef = null;
+
+async function initFirebase() {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('K20053634!'));
+  const key = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  _userRef = _db.ref('users/' + key);
 }
+
+// ── Persistence ───────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const snap = await _userRef.once('value');
+    const val  = snap.val();
+    if (val && val.sessions) {
+      const sessions = Array.isArray(val.sessions)
+        ? val.sessions
+        : Object.values(val.sessions);
+      return { sessions };
+    }
+    // One-time migration: push existing localStorage data to Firebase
+    const local = localStorage.getItem(STORAGE_KEY);
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed.sessions && parsed.sessions.length > 0) {
+        saveData(parsed);
+        return parsed;
+      }
+    }
+    return { sessions: [] };
+  } catch {
+    try {
+      const s = localStorage.getItem(STORAGE_KEY);
+      return s ? JSON.parse(s) : { sessions: [] };
+    } catch { return { sessions: [] }; }
+  }
+}
+
 function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  _userRef.set({ sessions: data.sessions }).catch(console.error);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); // local cache
 }
 
 // ── Flatten games from all sessions ──────────────────────────────────────
@@ -942,11 +984,13 @@ function initLaneAnimation() {
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────
-const data = loadData();
-renderAll(data);
-initLogForm(data);
 initScorecard();
 initGate();
 initReveal();
 initLaneAnimation();
-if (computeStats(data)) animateStats(computeStats(data));
+
+initFirebase().then(() => loadData()).then(data => {
+  renderAll(data);
+  initLogForm(data);
+  if (computeStats(data)) animateStats(computeStats(data));
+});
