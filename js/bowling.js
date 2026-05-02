@@ -219,6 +219,14 @@ function renderCharts(stats) {
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: ctx => ` ${ctx.raw} game${ctx.raw !== 1 ? 's' : ''}` } },
+        title: {
+          display: true,
+          text: `${validScr.length} games total`,
+          align: 'end',
+          color: '#94a3b8',
+          font: { family: 'Fira Code', size: 11, weight: 'normal' },
+          padding: { bottom: 8 },
+        },
       },
       scales: {
         y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Fira Code', size: 11 } }, grid: { color: 'rgba(15,23,42,.05)' } },
