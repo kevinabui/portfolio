@@ -80,6 +80,28 @@
   <section class="bowl-section" id="charts-section" style="display:none">
     <div class="container">
 
+      <!-- Trend headline -->
+      <p class="trend-headline" id="trend-headline"></p>
+
+      <!-- Personal Records -->
+      <div class="pr-strip">
+        <div class="pr-card">
+          <div class="pr-label">Best Series</div>
+          <div class="pr-value" id="pr-series">--</div>
+          <div class="pr-context">3-game total</div>
+        </div>
+        <div class="pr-card">
+          <div class="pr-label">Most Strikes</div>
+          <div class="pr-value" id="pr-strikes">--</div>
+          <div class="pr-context">in a single game</div>
+        </div>
+        <div class="pr-card">
+          <div class="pr-label">Best 5-Game Avg</div>
+          <div class="pr-value" id="pr-5avg">--</div>
+          <div class="pr-context">rolling window</div>
+        </div>
+      </div>
+
       <!-- Row 1: Score trend + Strike Rate % -->
       <div class="charts-grid">
         <div class="chart-card reveal">

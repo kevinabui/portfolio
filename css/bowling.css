@@ -105,6 +105,65 @@
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
+/* ── Trend Headline ──────────────────────────────────────────────────────── */
+.trend-headline {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.trend-headline strong { color: var(--text); font-style: normal; font-weight: 700; }
+.trend-up   { color: #10b981; font-style: normal; font-weight: 700; }
+.trend-down { color: #f97316; font-style: normal; font-weight: 700; }
+
+/* ── Personal Records ────────────────────────────────────────────────────── */
+.pr-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.pr-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.pr-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #b7952a, #f0c040, #b7952a);
+}
+.pr-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-sub);
+  margin-bottom: .5rem;
+}
+.pr-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #c9a227;
+  line-height: 1;
+  margin-bottom: .35rem;
+  font-variant-numeric: tabular-nums;
+}
+.pr-context {
+  font-size: .7rem;
+  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
+}
+
 .charts-grid-bottom { margin-bottom: 0; }
 .charts-grid-single { max-width: 420px; margin-inline: auto; }
 .chart-card {
@@ -899,6 +958,10 @@
   .charts-grid { grid-template-columns: 1fr; }
   .game-stats-grid { grid-template-columns: repeat(4, 1fr); }
   .game-fields { grid-template-columns: repeat(2, 1fr); }
+  .pr-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .pr-strip { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }

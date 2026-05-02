@@ -16,7 +16,7 @@ const _db = firebase.database();
 let _userRef = null;
 
 async function initFirebase() {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('K20053634!'));
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('kevin123'));
   const key = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   _userRef = _db.ref('users/' + key);
 }
@@ -94,6 +94,84 @@ function computeStats(data) {
     recentCount: recent.length,
     totalStrikes, totalSpares, totalOpens,
   };
+}
+
+// ── Personal Records ─────────────────────────────────────────────────────
+function renderPersonalRecords(games) {
+  const scores  = games.map(g => g.scratch).filter(v => v != null);
+  const strikes = games.map(g => g.strikes).filter(v => v != null);
+
+  // Best 3-game series
+  let bestSeries = 0;
+  for (let i = 0; i <= scores.length - 3; i++) {
+    const s = scores[i] + scores[i + 1] + scores[i + 2];
+    if (s > bestSeries) bestSeries = s;
+  }
+
+  // Most strikes in a single game
+  const maxStrikes = strikes.length ? Math.max(...strikes) : 0;
+
+  // Best 5-game rolling average
+  let best5 = 0;
+  for (let i = 0; i <= scores.length - 5; i++) {
+    const avg = Math.round((scores[i] + scores[i+1] + scores[i+2] + scores[i+3] + scores[i+4]) / 5);
+    if (avg > best5) best5 = avg;
+  }
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '--'; };
+  set('pr-series',  bestSeries > 0  ? bestSeries  : null);
+  set('pr-strikes', maxStrikes > 0  ? maxStrikes  : null);
+  set('pr-5avg',    best5 > 0       ? best5       : null);
+}
+
+// ── Trend Headline ────────────────────────────────────────────────────────
+function renderTrendHeadline(games) {
+  const el = document.getElementById('trend-headline');
+  if (!el) return;
+
+  const scores  = games.map(g => g.scratch).filter(v => v != null);
+  const allSR   = games.map(g => g.strikes).filter(v => v != null);
+  if (scores.length < 4) { el.textContent = ''; return; }
+
+  const seasonAvg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  const n         = Math.min(5, Math.floor(scores.length / 2));
+  const recent    = scores.slice(-n);
+  const prev      = scores.slice(-(n * 2), -n);
+  const recentAvg = Math.round(recent.reduce((a, b) => a + b, 0) / recent.length);
+  const prevAvg   = prev.length >= 2
+    ? Math.round(prev.reduce((a, b) => a + b, 0) / prev.length)
+    : seasonAvg;
+  const diff = recentAvg - prevAvg;
+
+  // Score trending up/down
+  if (Math.abs(diff) >= 5) {
+    const dir   = diff > 0 ? 'up' : 'down';
+    const cls   = diff > 0 ? 'trend-up' : 'trend-down';
+    const arrow = diff > 0 ? '↑' : '↓';
+    el.innerHTML = `Your average is <span class="${cls}">${arrow} ${Math.abs(diff)} points</span> over your last ${n} games ${diff > 0 ? '— keep it up.' : '— time to grind.'}`;
+    return;
+  }
+
+  // Consecutive above-average games
+  let streak = 0;
+  for (let i = scores.length - 1; i >= 0 && scores[i] >= seasonAvg; i--) streak++;
+  if (streak >= 3) {
+    el.innerHTML = `<span class="trend-up">${streak} games in a row</span> above your season average of <strong>${seasonAvg}</strong>. On a roll.`;
+    return;
+  }
+
+  // Strike rate trending up
+  if (allSR.length >= 6) {
+    const rSR = allSR.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const pSR = allSR.slice(-6, -3).reduce((a, b) => a + b, 0) / 3;
+    if (rSR - pSR >= 1.5) {
+      el.innerHTML = `Strike rate is climbing — averaging <span class="trend-up">${rSR.toFixed(1)} strikes</span> per game over your last 3 games.`;
+      return;
+    }
+  }
+
+  // Fallback
+  el.innerHTML = `<strong>${scores.length} games</strong> logged · season average: <strong>${seasonAvg}</strong>.`;
 }
 
 // ── Rolling average ───────────────────────────────────────────────────────
@@ -481,6 +559,8 @@ function renderAll(data) {
       document.getElementById(id).textContent = windowLabel;
     });
     renderCharts(stats);
+    renderPersonalRecords(stats.games);
+    renderTrendHeadline(stats.games);
     renderHistory(data);
     initReveal();
     animateStats(stats);
@@ -880,7 +960,7 @@ function initGate() {
   if (sessionStorage.getItem('bowl_unlocked') === '1') { unlock(); return; }
 
   btn.addEventListener('click', () => {
-    if (input.value.trim() === 'K20053634!') {
+    if (input.value.trim() === 'kevin123') {
       unlock();
     } else {
       err.textContent = 'Incorrect password.';
