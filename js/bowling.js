@@ -472,8 +472,9 @@ function renderHistory(data) {
           ${isPB ? `<span class="pb-badge">🏆 PB</span>` : ''}
           ${avgScratch != null ? `<span class="session-avg">avg ${avgScratch}</span>` : ''}
           <span class="session-chevron">${isFirst ? '▲' : '▼'}</span>
-          <button class="edit-session-btn" data-id="${session.id}">Edit</button>
-          <button class="delete-session-btn" data-id="${session.id}">Delete</button>
+          ${sessionStorage.getItem('bowl_unlocked') === '1' ? `
+            <button class="edit-session-btn" data-id="${session.id}">Edit</button>
+            <button class="delete-session-btn" data-id="${session.id}">Delete</button>` : ''}
         </div>
       </div>
       <div class="session-body">
@@ -516,7 +517,7 @@ function renderHistory(data) {
       </div>
     `;
 
-    card.querySelector('.edit-session-btn').addEventListener('click', e => {
+    card.querySelector('.edit-session-btn')?.addEventListener('click', e => {
       e.stopPropagation();
       if (window._bowlEdit) window._bowlEdit(session);
     });
@@ -528,7 +529,7 @@ function renderHistory(data) {
       card.querySelector('.session-chevron').textContent = open ? '▲' : '▼';
     });
 
-    card.querySelector('.delete-session-btn').addEventListener('click', () => {
+    card.querySelector('.delete-session-btn')?.addEventListener('click', () => {
       if (!confirm('Delete this session?')) return;
       data.sessions = data.sessions.filter(s => s.id !== session.id);
       saveData(data);
@@ -955,6 +956,7 @@ function initGate() {
     gate.style.display = 'none';
     form.style.display = '';
     sessionStorage.setItem('bowl_unlocked', '1');
+    if (window._bowlRenderAll) window._bowlRenderAll();
   }
 
   if (sessionStorage.getItem('bowl_unlocked') === '1') { unlock(); return; }
@@ -1190,4 +1192,5 @@ initFirebase().then(() => loadData()).then(data => {
   if (computeStats(data)) animateStats(computeStats(data));
   const exportBtn = document.getElementById('export-btn');
   if (exportBtn) exportBtn.addEventListener('click', () => exportCSV(data));
+  window._bowlRenderAll = () => renderAll(data);
 });
