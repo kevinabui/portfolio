@@ -1149,7 +1149,36 @@ function exportCSV(data) {
   URL.revokeObjectURL(a.href);
 }
 
+// ── Intro Video ───────────────────────────────────────────────────────────
+function initIntroVideo() {
+  const overlay = document.getElementById('intro-overlay');
+  const video   = document.getElementById('intro-video');
+  const unmute  = document.getElementById('intro-unmute');
+  const skip    = document.getElementById('intro-skip');
+  if (!overlay || !video) return;
+
+  function dismiss() {
+    overlay.classList.add('intro-hiding');
+    setTimeout(() => overlay.remove(), 700);
+  }
+
+  video.play().catch(() => {
+    // Autoplay blocked — show a play prompt instead
+    overlay.style.cursor = 'pointer';
+    overlay.addEventListener('click', () => video.play(), { once: true });
+  });
+
+  video.addEventListener('ended', dismiss);
+  skip.addEventListener('click', dismiss);
+
+  unmute.addEventListener('click', () => {
+    video.muted = !video.muted;
+    unmute.textContent = video.muted ? '🔇 Unmute' : '🔊 Muted';
+  });
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
+initIntroVideo();
 initScorecard();
 initGate();
 initReveal();
