@@ -6,7 +6,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   position: relative;
   overflow: hidden;
   padding: calc(var(--nav-h) + 48px) 24px 56px;
@@ -19,7 +18,23 @@
     linear-gradient(rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px,
     linear-gradient(90deg, rgba(3,105,161,.03) 1px, transparent 1px) 0 0 / 48px 48px;
 }
-.bowl-hero-content { position: relative; z-index: 1; max-width: 600px; }
+.bowl-hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 960px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+.bowl-hero-text { flex: 1; text-align: left; }
+.bowl-team {
+  opacity: .6;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: .04em;
+  text-transform: none;
+}
 .bowl-eyebrow {
   font-size: .85rem;
   font-weight: 600;
@@ -42,8 +57,30 @@
   font-size: 1rem;
   color: var(--text-muted);
   max-width: 480px;
-  margin: 0 auto 2rem;
+  margin: 0 0 2rem;
   line-height: 1.6;
+}
+.bowl-hero-photo {
+  flex-shrink: 0;
+  text-align: center;
+}
+.team-photo {
+  width: 210px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(15,23,42,.12), 0 0 0 6px #fff, 0 8px 24px rgba(15,23,42,.18);
+  transform: rotate(1.8deg);
+  display: block;
+}
+.team-photo-caption {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: .75rem;
+  opacity: .7;
 }
 
 /* Stats Bar */
@@ -1031,6 +1068,10 @@
   .pr-strip { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
+  .bowl-hero-content { flex-direction: column; text-align: center; gap: 1.5rem; }
+  .bowl-hero-text { text-align: center; }
+  .bowl-sub { margin: 0 auto 2rem; }
+  .team-photo { width: 160px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .form-top { grid-template-columns: 1fr; }
   .game-stats-grid { grid-template-columns: repeat(2, 1fr); }
