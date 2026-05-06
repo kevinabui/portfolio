@@ -201,6 +201,29 @@
   font-family: 'Fira Code', monospace;
 }
 
+/* ── Fun / Quirky Stats ──────────────────────────────────────────────────── */
+.fun-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 0 0 2.5rem;
+}
+.fun-stat-card {
+  background: rgba(15,23,42,.55);
+  border: 1px solid rgba(148,163,184,.10);
+  border-radius: 12px;
+  padding: 1.2rem 1rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+}
+.fun-stat-emoji { font-size: 1.6rem; line-height: 1; margin-bottom: .15rem; }
+.fun-stat-value { font-size: 2rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.fun-stat-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+.fun-stat-sub   { font-size: .7rem; color: rgba(148,163,184,.6); font-family: 'Fira Code', monospace; }
+
 .charts-grid-bottom { margin-bottom: 0; }
 .charts-grid-single { max-width: 420px; margin-inline: auto; }
 .chart-card {
@@ -1063,6 +1086,9 @@
   .game-stats-grid { grid-template-columns: repeat(4, 1fr); }
   .game-fields { grid-template-columns: repeat(2, 1fr); }
   .pr-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 700px) {
+  .fun-stats-strip { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
   .pr-strip { grid-template-columns: 1fr; }

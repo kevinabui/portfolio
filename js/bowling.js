@@ -124,6 +124,34 @@ function renderPersonalRecords(games) {
   set('pr-5avg',    best5 > 0       ? best5       : null);
 }
 
+// ── Fun / Quirky Stats ────────────────────────────────────────────────────
+function renderFunStats(games, sessions) {
+  const totalPins    = games.reduce((a, g) => a + (g.scratch || 0), 0);
+  const totalStrikes = games.reduce((a, g) => a + (g.strikes || 0), 0);
+  const totalGutters = games.reduce((a, g) => a + (g.gutters || 0), 0);
+
+  const monthMap = {};
+  sessions.forEach(s => {
+    const key = s.date.slice(0, 7);
+    monthMap[key] = (monthMap[key] || 0) + s.games.length;
+  });
+  let bestMonthCount = 0, bestMonthLabel = '';
+  Object.entries(monthMap).forEach(([key, count]) => {
+    if (count > bestMonthCount) {
+      bestMonthCount = count;
+      const [y, m]   = key.split('-');
+      bestMonthLabel = new Date(+y, +m - 1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+  });
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('fun-pins',      totalPins.toLocaleString());
+  set('fun-strikes',   totalStrikes.toLocaleString());
+  set('fun-gutters',   totalGutters.toLocaleString());
+  set('fun-month',     bestMonthCount || '--');
+  set('fun-month-sub', bestMonthLabel ? `games in ${bestMonthLabel}` : 'games in one month');
+}
+
 // ── Trend Headline ────────────────────────────────────────────────────────
 function renderTrendHeadline(games) {
   const el = document.getElementById('trend-headline');
@@ -562,6 +590,7 @@ function renderAll(data) {
     });
     renderCharts(stats);
     renderPersonalRecords(stats.games);
+    renderFunStats(stats.games, data.sessions);
     renderTrendHeadline(stats.games);
     renderHistory(data);
     initReveal();
