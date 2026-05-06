@@ -124,3 +124,87 @@
     card.style.transitionDelay = `${i * 50}ms`;
   });
 })();
+
+
+// ── Typewriter hero headline ──────────────────────────────────────────────────
+(function initTypewriter() {
+  const el = document.querySelector('.hero-name');
+  if (!el) return;
+
+  const phrases = [
+    'I build data tools that turn messy information into something people can actually use.',
+    'I build LLM systems that ground AI in real-world data.',
+    'I build pipelines that connect raw data to clear decisions.',
+    'I build analytics dashboards people actually want to use.',
+  ];
+
+  const cursor = document.createElement('span');
+  cursor.className = 'type-cursor';
+  cursor.textContent = '|';
+  el.textContent = '';
+  el.appendChild(cursor);
+
+  let pi = 0, ci = 0, deleting = false;
+  const SPEED_TYPE = 38, SPEED_DEL = 18, PAUSE_END = 2200, PAUSE_START = 400;
+
+  function tick() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ci);
+      el.appendChild(cursor);
+      ci++;
+      if (ci > phrase.length) {
+        deleting = true;
+        setTimeout(tick, PAUSE_END);
+        return;
+      }
+      setTimeout(tick, SPEED_TYPE);
+    } else {
+      el.textContent = phrase.slice(0, ci);
+      el.appendChild(cursor);
+      ci--;
+      if (ci < 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+        ci = 0;
+        setTimeout(tick, PAUSE_START);
+        return;
+      }
+      setTimeout(tick, SPEED_DEL);
+    }
+  }
+
+  tick();
+})();
+
+
+// ── Live bowling avg in hero ──────────────────────────────────────────────────
+(function initLiveBowlingAvg() {
+  if (typeof firebase === 'undefined') return;
+  try {
+    firebase.initializeApp({
+      apiKey:      'AIzaSyB7kBe56BuvGA05FrzYgTWXHWYA5X4UoEg',
+      databaseURL: 'https://bowling-stats-tracker-2b8c5-default-rtdb.firebaseio.com',
+      projectId:   'bowling-stats-tracker-2b8c5',
+    });
+  } catch (_) {}
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode('kevin123'))
+    .then(buf => {
+      const key = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      return firebase.database().ref('users/' + key).once('value');
+    })
+    .then(snap => {
+      const val = snap.val();
+      if (!val?.sessions) return;
+      const sessions = Array.isArray(val.sessions) ? val.sessions : Object.values(val.sessions);
+      const games  = sessions.flatMap(s => s.games);
+      const recent = games.slice(-15).map(g => g.scratch).filter(Boolean);
+      if (!recent.length) return;
+      const avg   = Math.round(recent.reduce((a, b) => a + b, 0) / recent.length);
+      const avgEl = document.getElementById('bowl-avg');
+      const pill  = document.getElementById('bowl-avg-pill');
+      if (avgEl) avgEl.textContent = avg;
+      if (pill)  pill.style.display = '';
+    })
+    .catch(() => {});
+})();
